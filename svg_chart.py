@@ -2,11 +2,12 @@ import drawsvg as draw
 import math
 
 class Node:
-    def __init__(self, col, row, text, color="white"):
+    def __init__(self, col, row, text, color="white", rounded=False):
         self.col = col
         self.row = row
         self.text = text
         self.color = color
+        self.rounded = rounded
         print(F"New node '{text}'")
 
 class Edge:
@@ -68,12 +69,14 @@ class Chart:
         return obj
 
     def drawNode(self, drawing, node):
+        rx = self.node_height/2 if node.rounded else 0
         r = draw.Rectangle((node.col * self.horizontal_step) - self.node_width/2,
                            (node.row * self.vertical_step) - self.node_height/2,
                            self.node_width,
                            self.node_height,
                            fill=node.color,
-                           stroke='black')
+                           stroke='black',
+                           rx=rx)
         drawing.append(r)
         t = draw.Text(node.text,
                       self.font_size,
