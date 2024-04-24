@@ -24,11 +24,12 @@ chart = Chart(name="node_demo")
 
 for c in range(3):
     for r in range(4):
-        o = chart.add(Node(c, r, F"{c},{r}"))
-
-o = chart.add(Node(0, 4, "0,4 (rounded)", rounded=True))
-
-o = chart.add(Node(1.5, 4, "1.5,4 (colored)", color="#bcd7ff"))
+        if c==0 and r==1:
+            o = chart.add(Node(c, r, F"{c},{r} (rounded)", rounded=True))
+        elif c==2 and r==2:
+            o = chart.add(Node(c, r, F"{c},{r} (colored)", color="#bcd7ff"))
+        else:
+            o = chart.add(Node(c, r, F"{c},{r}"))
 
 chart.exportSvg("node_demo.svg")
 
