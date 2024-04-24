@@ -207,12 +207,20 @@ class Chart:
         for cluster in self.all_clusters:
             englobing_rect.englobe(self.getClusterRect(cluster))
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
-        print(F"englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
+        print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
 
         # Create a new drawing
         d = draw.Drawing(englobing_rect.max_x-englobing_rect.min_x,
                          englobing_rect.max_y-englobing_rect.min_y,
                          origin=(englobing_rect.min_x,englobing_rect.min_y))
+
+        # Draw englobing white rect
+        d.append(draw.Rectangle(englobing_rect.min_x,
+                                      englobing_rect.min_y,
+                                      englobing_rect.getWidth(),
+                                      englobing_rect.getHeight(),
+                                      fill='white',
+                                      stroke='none'))
 
         # Draw all elements
         for cluster in self.all_clusters:
