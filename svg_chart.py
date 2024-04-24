@@ -24,7 +24,7 @@ class Edge:
 
 class Cluster:
     # Warning: nodes append order defines the paint order (last nodes will hide first ones)
-    def __init__(self, nodes, text="", margin_x=10, margin_y=10, color="none", rounded=False):
+    def __init__(self, nodes, text="", margin_x=15, margin_y=15, color="none", rounded=False):
         assert(len(nodes)>0)
         self.nodes = nodes
         self.text = text
@@ -62,10 +62,10 @@ class Rect:
 class Chart:
     def __init__(self,
                  font_size = 20,
-                 node_width = 100,
+                 node_width = 150,
                  node_height = 40,
-                 horizontal_node_space = 10,
-                 vertical_node_space = 10,
+                 horizontal_node_space = 50,
+                 vertical_node_space = 30,
                  name = "chart"):
         self.font_size  = font_size
         self.node_width  = node_width
@@ -136,8 +136,8 @@ class Chart:
             return self.node_height * (edge_position-0.5)
 
     def drawEdge(self, drawing, edge):
-        arrow = draw.Marker(-10, -5, 2, 5, orient='auto-start-reverse')
-        arrow.append(draw.Lines(-10, 3, -10, -3, 2, 0, fill=edge.color, close=True))
+        arrow = draw.Marker(-9, -5, 2, 5, orient='auto-start-reverse')
+        arrow.append(draw.Lines(-9, 3, -9, -3, 2, 0, fill=edge.color, close=True))
 
         origin_x = edge.origin_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'], edge.arrow['origin_edge_position'])
         origin_y = edge.origin_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'], edge.arrow['origin_edge_position'])
@@ -148,7 +148,7 @@ class Chart:
                       destination_x, destination_y,
                       stroke=edge.color,
                       stroke_width=2,
-                      stroke_dasharray="9,5" if edge.arrow['dashed'] else None,
+                      stroke_dasharray="7,4" if edge.arrow['dashed'] else None,
                       fill='none',
                       marker_start=arrow if edge.arrow['origin_arrow'] else None,
                       marker_end=arrow if edge.arrow['destination_arrow'] else None))
@@ -161,7 +161,7 @@ class Chart:
                       font_family='Arial',
                       fill='white',
                       stroke='white',
-                      stroke_width=3))
+                      stroke_width=4))
         drawing.append(draw.Text(edge.text,
                       self.font_size,
                       (origin_x + destination_x) / 2,

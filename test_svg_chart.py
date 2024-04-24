@@ -1,9 +1,9 @@
 from svg_chart import *
 
 
-chart = Chart(node_width = 150, name="test_chart")
+chart = Chart(name="test_chart")
 
-o = chart.add(Node(0,0,"Origin node"))
+o = chart.add(Node(0,-1,"Origin node"))
 
 a = chart.add(Node(1,5,"A",rounded=True))
 
