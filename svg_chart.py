@@ -12,15 +12,15 @@ class Node:
         print(F"New node '{text}'")
 
 class Edge:
-    def __init__(self, from_node, to_node, edge_string, text="", color="black"):
-        assert(from_node is not None)
-        assert(to_node is not None)
-        self.from_node = from_node
-        self.to_node = to_node
+    def __init__(self, origin_node, destination_node, edge_string, text="", color="black"):
+        assert(origin_node is not None)
+        assert(destination_node is not None)
+        self.origin_node = origin_node
+        self.destination_node = destination_node
         self.arrow = parseEdgeString(edge_string)
         self.text = text
         self.color = color
-        print(F"New edge '{text}' : '{from_node.text}' '{edge_string}' '{to_node.text}'")
+        print(F"New edge '{text}' : '{origin_node.text}' '{edge_string}' '{destination_node.text}'")
 
 class Rect:
     def __init__(self, min_x, max_x, min_y, max_y):
@@ -108,10 +108,10 @@ class Chart:
         arrow = draw.Marker(-10, -5, 2, 5, orient='auto-start-reverse')
         arrow.append(draw.Lines(-10, 3, -10, -3, 2, 0, fill=edge.color, close=True))
 
-        origin_x = edge.from_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'])
-        origin_y = edge.from_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'])
-        destination_x = edge.to_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'])
-        destination_y = edge.to_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'])
+        origin_x = edge.origin_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'])
+        origin_y = edge.origin_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'])
+        destination_x = edge.destination_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'])
+        destination_y = edge.destination_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'])
 
         l = draw.Line(origin_x, origin_y,
                       destination_x, destination_y,
