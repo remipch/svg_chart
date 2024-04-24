@@ -22,6 +22,18 @@ class Edge:
         self.color = color
         print(F"New edge '{text}' : '{origin_node.text}' '{edge_string}' '{destination_node.text}'")
 
+class Cluster:
+    # Warning: nodes append order defines the paint order (last nodes will hide first ones)
+    def __init__(self, nodes, text="", margin_x=10, margin_y=10, color="none", rounded=False):
+        assert(len(nodes)>0)
+        self.nodes = nodes
+        self.text = text
+        self.margin_x = margin_x
+        self.margin_y = margin_y
+        self.color = color
+        self.rounded = rounded
+        print(F"New cluster '{text}'")
+
 class Rect:
     def __init__(self, min_x, max_x, min_y, max_y):
         self.min_x = min_x
@@ -54,18 +66,17 @@ class Chart:
                  node_height = 40,
                  horizontal_node_space = 10,
                  vertical_node_space = 10,
-                 cluster_node_space = 10,
                  name = "chart"):
         self.font_size  = font_size
         self.node_width  = node_width
         self.node_height  = node_height
         self.horizontal_node_space  = horizontal_node_space
         self.vertical_node_space  = vertical_node_space
-        self.cluster_node_space  = cluster_node_space
         self.name  = name
 
         self.all_nodes = []
         self.all_edges = []
+        self.all_clusters = []
 
         self.horizontal_step = node_width + horizontal_node_space
         self.vertical_step = node_height + vertical_node_space
@@ -77,6 +88,8 @@ class Chart:
             self.all_nodes.append(obj)
         elif isinstance(obj, Edge):
             self.all_edges.append(obj)
+        elif isinstance(obj, Cluster):
+            self.all_clusters.append(obj)
         else:
             raise TypeError("Unsupported type")
         return obj
@@ -157,17 +170,42 @@ class Chart:
                       dominant_baseline='middle',
                       font_family='Arial'))
 
-    def updateEnglobingRect(self, rect, node):
-        rect.min_x = min(rect.min_x, (node.col * self.horizontal_step) - self.node_width/2)
-        rect.max_x = max(rect.max_x, (node.col * self.horizontal_step) + self.node_width/2)
-        rect.min_y = min(rect.min_y, (node.row * self.vertical_step) - self.node_height/2)
-        rect.max_y = max(rect.max_y, (node.row * self.vertical_step) + self.node_height/2)
+    def getClusterRect(self, cluster):
+        englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
+        for node in cluster.nodes:
+            englobing_rect.englobe(self.getNodeRect(node))
+        englobing_rect.enlarge(cluster.margin_x, cluster.margin_y)
+        return englobing_rect
+
+    def drawCluster(self, drawing, cluster):
+        englobing_rect = self.getClusterRect(cluster)
+
+        rx = self.node_height/2 if cluster.rounded else 0
+        drawing.append(draw.Rectangle(englobing_rect.min_x,
+                                      englobing_rect.min_y,
+                                      englobing_rect.getWidth(),
+                                      englobing_rect.getHeight(),
+                                      fill=cluster.color,
+                                      stroke='black',
+                                      stroke_width=2,
+                                      rx=rx))
+
+        drawing.append(draw.Text(cluster.text,
+                                 self.font_size,
+                                 englobing_rect.min_x,
+                                 englobing_rect.min_y,
+                                 text_anchor='start',
+                                 dominant_baseline='text-after-edge',
+                                 font_family='Arial',
+                                 font_weight='bold'))
 
     def exportSvg(self, filename):
-        # Compute drawing size by iterating all nodes
+        # Compute drawing size by iterating all nodes and clusters
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
         for node in self.all_nodes:
             englobing_rect.englobe(self.getNodeRect(node))
+        for cluster in self.all_clusters:
+            englobing_rect.englobe(self.getClusterRect(cluster))
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
         print(F"englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
 
@@ -177,6 +215,8 @@ class Chart:
                          origin=(englobing_rect.min_x,englobing_rect.min_y))
 
         # Draw all elements
+        for cluster in self.all_clusters:
+            self.drawCluster(d, cluster)
         for edge in self.all_edges:
             self.drawEdge(d, edge)
         for node in self.all_nodes:

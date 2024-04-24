@@ -15,4 +15,6 @@ chart.add(Edge(o,a,"b-->l", "b-->l",color="cyan"))
 
 chart.add(Edge(b,a,"b<-->t0.9","b<-->t0.9",color="#97a1ff"))
 
+chart.add(Cluster([a,b], "Green cluster", color="#efffb9"))
+
 chart.exportSvg("output.svg")
