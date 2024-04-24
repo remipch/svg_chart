@@ -86,30 +86,30 @@ class Chart:
                       dominant_baseline='middle',
                       font_family='Arial'))
 
-    def arrowBorderOffsetX(self, anchor_border):
+    def arrowBorderOffsetX(self, anchor_border, edge_position):
         if anchor_border==AnchorBorder.LEFT:
             return -self.node_width/2
         elif anchor_border==AnchorBorder.RIGHT:
             return self.node_width/2
         else:
-            return 0
+            return self.node_width * (edge_position-0.5)
 
-    def arrowBorderOffsetY(self, anchor_border):
+    def arrowBorderOffsetY(self, anchor_border, edge_position):
         if anchor_border==AnchorBorder.TOP:
             return -self.node_height/2
         elif anchor_border==AnchorBorder.BOTTOM:
             return self.node_height/2
         else:
-            return 0
+            return self.node_height * (edge_position-0.5)
 
     def drawEdge(self, drawing, edge):
         arrow = draw.Marker(-10, -5, 2, 5, orient='auto-start-reverse')
         arrow.append(draw.Lines(-10, 3, -10, -3, 2, 0, fill=edge.color, close=True))
 
-        origin_x = edge.origin_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'])
-        origin_y = edge.origin_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'])
-        destination_x = edge.destination_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'])
-        destination_y = edge.destination_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'])
+        origin_x = edge.origin_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'], edge.arrow['origin_edge_position'])
+        origin_y = edge.origin_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'], edge.arrow['origin_edge_position'])
+        destination_x = edge.destination_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'], edge.arrow['destination_edge_position'])
+        destination_y = edge.destination_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'], edge.arrow['destination_edge_position'])
 
         drawing.append(draw.Line(origin_x, origin_y,
                       destination_x, destination_y,
