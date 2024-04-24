@@ -1,6 +1,6 @@
 import drawsvg as draw
 import math
-from arrow_string import parseArrowString, AnchorBorder
+from edge_string import parseEdgeString, AnchorBorder
 
 class Node:
     def __init__(self, col, row, text, color="white", rounded=False):
@@ -12,15 +12,15 @@ class Node:
         print(F"New node '{text}'")
 
 class Edge:
-    def __init__(self, from_node, to_node, arrow_string, text="", color="black"):
+    def __init__(self, from_node, to_node, edge_string, text="", color="black"):
         assert(from_node is not None)
         assert(to_node is not None)
         self.from_node = from_node
         self.to_node = to_node
-        self.arrow = parseArrowString(arrow_string)
+        self.arrow = parseEdgeString(edge_string)
         self.text = text
         self.color = color
-        print(F"New edge '{text}' : '{from_node.text}' '{arrow_string}' '{to_node.text}'")
+        print(F"New edge '{text}' : '{from_node.text}' '{edge_string}' '{to_node.text}'")
 
 class Rect:
     def __init__(self, min_x, max_x, min_y, max_y):
