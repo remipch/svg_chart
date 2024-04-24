@@ -72,12 +72,13 @@ class Chart:
     def drawNode(self, drawing, node):
         rx = self.node_height/2 if node.rounded else 0
         drawing.append(draw.Rectangle((node.col * self.horizontal_step) - self.node_width/2,
-                           (node.row * self.vertical_step) - self.node_height/2,
-                           self.node_width,
-                           self.node_height,
-                           fill=node.color,
-                           stroke='black',
-                           rx=rx))
+                                      (node.row * self.vertical_step) - self.node_height/2,
+                                      self.node_width,
+                                      self.node_height,
+                                      fill=node.color,
+                                      stroke='black',
+                                      stroke_width=2,
+                                      rx=rx))
         drawing.append(draw.Text(node.text,
                       self.font_size,
                       node.col * self.horizontal_step,
