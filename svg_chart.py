@@ -71,22 +71,20 @@ class Chart:
 
     def drawNode(self, drawing, node):
         rx = self.node_height/2 if node.rounded else 0
-        r = draw.Rectangle((node.col * self.horizontal_step) - self.node_width/2,
+        drawing.append(draw.Rectangle((node.col * self.horizontal_step) - self.node_width/2,
                            (node.row * self.vertical_step) - self.node_height/2,
                            self.node_width,
                            self.node_height,
                            fill=node.color,
                            stroke='black',
-                           rx=rx)
-        drawing.append(r)
-        t = draw.Text(node.text,
+                           rx=rx))
+        drawing.append(draw.Text(node.text,
                       self.font_size,
                       node.col * self.horizontal_step,
                       node.row * self.vertical_step,
                       text_anchor='middle',
                       dominant_baseline='middle',
-                      font_family='Arial')
-        drawing.append(t)
+                      font_family='Arial'))
 
     def arrowBorderOffsetX(self, anchor_border):
         if anchor_border==AnchorBorder.LEFT:
@@ -113,15 +111,31 @@ class Chart:
         destination_x = edge.destination_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'])
         destination_y = edge.destination_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'])
 
-        l = draw.Line(origin_x, origin_y,
+        drawing.append(draw.Line(origin_x, origin_y,
                       destination_x, destination_y,
                       stroke=edge.color,
                       stroke_width=2,
                       stroke_dasharray="9,5" if edge.arrow['dashed'] else None,
                       fill='none',
                       marker_start=arrow if edge.arrow['origin_arrow'] else None,
-                      marker_end=arrow if edge.arrow['destination_arrow'] else None)
-        drawing.append(l)
+                      marker_end=arrow if edge.arrow['destination_arrow'] else None))
+        drawing.append(draw.Text(edge.text,
+                      self.font_size,
+                      (origin_x + destination_x) / 2,
+                      (origin_y + destination_y) / 2,
+                      text_anchor='middle',
+                      dominant_baseline='middle',
+                      font_family='Arial',
+                      fill='white',
+                      stroke='white',
+                      stroke_width=3))
+        drawing.append(draw.Text(edge.text,
+                      self.font_size,
+                      (origin_x + destination_x) / 2,
+                      (origin_y + destination_y) / 2,
+                      text_anchor='middle',
+                      dominant_baseline='middle',
+                      font_family='Arial'))
 
     def updateEnglobingRect(self, rect, node):
         rect.min_x = min(rect.min_x, (node.col * self.horizontal_step) - self.node_width/2)
