@@ -9,6 +9,6 @@ a = chart.add(Node(1,2,"A",rounded=True))
 
 b = chart.add(Node(2,2,"This is node B", color="#d9ffe4"))
 
-chart.add(Edge(o,a,"->",color="green"))
+chart.add(Edge(o,a,"b->t",color="green"))
 
 chart.exportSvg("output.svg")
