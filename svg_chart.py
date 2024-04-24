@@ -1,6 +1,6 @@
 import drawsvg as draw
 import math
-from arrow_string import parseArrowString
+from arrow_string import parseArrowString, AnchorBorder
 
 class Node:
     def __init__(self, col, row, text, color="white", rounded=False):
@@ -88,18 +88,39 @@ class Chart:
                       font_family='Arial')
         drawing.append(t)
 
+    def arrowBorderOffsetX(self, anchor_border):
+        if anchor_border==AnchorBorder.LEFT:
+            return -self.node_width/2
+        elif anchor_border==AnchorBorder.RIGHT:
+            return self.node_width/2
+        else:
+            return 0
+
+    def arrowBorderOffsetY(self, anchor_border):
+        if anchor_border==AnchorBorder.TOP:
+            return -self.node_height/2
+        elif anchor_border==AnchorBorder.BOTTOM:
+            return self.node_height/2
+        else:
+            return 0
+
     def drawEdge(self, drawing, edge):
-        arrow = draw.Marker(-10, -5, 2, 5, orient='auto')
+        arrow = draw.Marker(-10, -5, 2, 5, orient='auto-start-reverse')
         arrow.append(draw.Lines(-10, 3, -10, -3, 2, 0, fill=edge.color, close=True))
 
-        l = draw.Line(edge.from_node.col * self.horizontal_step,
-                              edge.from_node.row * self.vertical_step,
-                              edge.to_node.col * self.horizontal_step,
-                              edge.to_node.row * self.vertical_step - self.node_height/2,
-                              stroke=edge.color,
-                              stroke_width=2,
-                              fill='none',
-                              marker_end=arrow)
+        origin_x = edge.from_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'])
+        origin_y = edge.from_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'])
+        destination_x = edge.to_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'])
+        destination_y = edge.to_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'])
+
+        l = draw.Line(origin_x, origin_y,
+                      destination_x, destination_y,
+                      stroke=edge.color,
+                      stroke_width=2,
+                      stroke_dasharray="9,5" if edge.arrow['dashed'] else None,
+                      fill='none',
+                      marker_start=arrow if edge.arrow['origin_arrow'] else None,
+                      marker_end=arrow if edge.arrow['destination_arrow'] else None)
         drawing.append(l)
 
     def updateEnglobingRect(self, rect, node):

@@ -27,9 +27,9 @@ def parseArrowString(arrow_string):
     # two '-' means dashed line
     # other are incorrect
     if len(parts)==2:
-        stroke_dasharray="1"
+        dashed=False
     elif len(parts)==3:
-        stroke_dasharray="9,5"
+        dashed=True
     else:
         print(F"Incorrect arrow_string")
         print(F"parts: '{parts}'")
@@ -64,7 +64,7 @@ def parseArrowString(arrow_string):
         destination_arrow_position = float(destination_arrow_string)
 
     return {
-        'stroke_dasharray': stroke_dasharray,
+        'dashed': dashed,
         'origin_arrow': origin_arrow,
         'origin_anchor_border': origin_anchor_border,
         'origin_arrow_position': origin_arrow_position,
