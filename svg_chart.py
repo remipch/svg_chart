@@ -35,6 +35,18 @@ class Rect:
         self.min_y = self.min_y - margin_y
         self.max_y = self.max_y + margin_y
 
+    def englobe(self, other):
+        self.min_x = min(self.min_x, other.min_x)
+        self.max_x = max(self.max_x, other.max_x)
+        self.min_y = min(self.min_y, other.min_y)
+        self.max_y = max(self.max_y, other.max_y)
+
+    def getWidth(self):
+        return self.max_x - self.min_x
+
+    def getHeight(self):
+        return self.max_y - self.min_y
+
 class Chart:
     def __init__(self,
                  font_size = 20,
@@ -69,12 +81,19 @@ class Chart:
             raise TypeError("Unsupported type")
         return obj
 
+    def getNodeRect(self, node):
+        return Rect((node.col * self.horizontal_step) - self.node_width/2,
+                    (node.col * self.horizontal_step) + self.node_width/2,
+                    (node.row * self.vertical_step) - self.node_height/2,
+                    (node.row * self.vertical_step) + self.node_height/2)
+
     def drawNode(self, drawing, node):
         rx = self.node_height/2 if node.rounded else 0
-        drawing.append(draw.Rectangle((node.col * self.horizontal_step) - self.node_width/2,
-                                      (node.row * self.vertical_step) - self.node_height/2,
-                                      self.node_width,
-                                      self.node_height,
+        rect = self.getNodeRect(node)
+        drawing.append(draw.Rectangle(rect.min_x,
+                                      rect.min_y,
+                                      rect.getWidth(),
+                                      rect.getHeight(),
                                       fill=node.color,
                                       stroke='black',
                                       stroke_width=2,
@@ -148,7 +167,7 @@ class Chart:
         # Compute drawing size by iterating all nodes
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
         for node in self.all_nodes:
-            self.updateEnglobingRect(englobing_rect, node)
+            englobing_rect.englobe(self.getNodeRect(node))
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
         print(F"englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
 
