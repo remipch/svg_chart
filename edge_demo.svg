@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="850.0" height="660.0" viewBox="-125.0 -50.0 850.0 660.0">
+<defs>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d0">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d1">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d2">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d3">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d4">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d5">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+<marker markerWidth="11" markerHeight="10" viewBox="-9 -5 11 10" orient="auto-start-reverse" id="d6">
+<path d="M-9,3 L-9,-3 L2,0 Z" fill="black" />
+</marker>
+</defs>
+<rect x="-125.0" y="-50.0" width="850.0" height="660.0" fill="white" stroke="none" />
+<path d="M-30.0,20.0 L29.999999999999993,190.0" stroke="black" stroke-width="2" fill="none" />
+<text x="-3.552713678800501e-15" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">b0.3-t0.7</text>
+<text x="-3.552713678800501e-15" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">b0.3-t0.7</text>
+<path d="M200.0,20.0 L200.0,190.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d0)" />
+<text x="200.0" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">b-&gt;t</text>
+<text x="200.0" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">b-&gt;t</text>
+<path d="M424.0,20.0 L424.0,190.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d1)" />
+<text x="424.0" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">b0.66&lt;-t0.66</text>
+<text x="424.0" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">b0.66&lt;-t0.66</text>
+<path d="M555.0,20.0 L600.0,190.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d2)" marker-end="url(#d2)" />
+<text x="577.5" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">b0.2&lt;-&gt;t</text>
+<text x="577.5" y="105.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">b0.2&lt;-&gt;t</text>
+<path d="M75.0,350.0 L325.0,350.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d3)" />
+<text x="200.0" y="350.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">r-&gt;l</text>
+<text x="200.0" y="350.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">r-&gt;l</text>
+<path d="M75.0,366.0 L325.0,420.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d4)" />
+<text x="200.0" y="393.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">r0.9-&gt;l</text>
+<text x="200.0" y="393.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">r0.9-&gt;l</text>
+<path d="M29.999999999999993,370.0 L125.0,560.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d5)" />
+<text x="77.5" y="465.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">b0.7-&gt;l</text>
+<text x="77.5" y="465.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">b0.7-&gt;l</text>
+<path d="M340.0,440.0 L260.0,540.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d6)" />
+<text x="300.0" y="490.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">b0.1-&gt;t0.9</text>
+<text x="300.0" y="490.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">b0.1-&gt;t0.9</text>
+<rect x="-75.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="0" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="-75.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="0" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="125.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="200" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="125.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="200" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="325.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="400" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="325.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="400" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="525.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="600" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="525.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="600" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="-75.0" y="330.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="0" y="350" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="325.0" y="330.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="400" y="350" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="325.0" y="400.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="400" y="420" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<rect x="125.0" y="540.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="200" y="560" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+</svg>
