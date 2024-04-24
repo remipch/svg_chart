@@ -7,6 +7,8 @@ Minimalist tool to draw simple charts.
 This example chart is made with the following code :
 
 ``` python
+from svg_chart import *
+
 chart = Chart(name="simple_demo")
 
 a = chart.add(Node(0.5, 0, "A"))
@@ -52,7 +54,7 @@ When creating an `Edge`, you :
 
 ![Edges](edge_demo.svg)
 
-## Cluster
+## Clusters
 
 Optional clusters can be created arround nodes.
 
