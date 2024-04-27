@@ -1,6 +1,6 @@
 from svg_chart import *
 
-chart = Chart(name="simple_demo")
+chart = Chart()
 
 a = chart.add(Node(0.5, 0, "A"))
 b = chart.add(Node(0, 2, "B", color="#bcd7ff"))
@@ -20,7 +20,7 @@ chart.exportSvg("simple_demo.svg")
 
 
 
-chart = Chart(name="node_demo")
+chart = Chart()
 
 for c in range(3):
     for r in range(3):
@@ -38,7 +38,7 @@ chart.exportSvg("node_demo.svg")
 
 
 
-chart = Chart(name="edge_demo")
+chart = Chart()
 
 tb = chart.add(Node(2, 0, "top_bottom"))
 lr = chart.add(Node(2, 5, "left_right"))
@@ -56,7 +56,7 @@ chart.exportSvg("edge_demo.svg")
 
 
 
-chart = Chart(name="cluster_demo")
+chart = Chart()
 
 o = chart.add(Node(1, -2, "Out node"))
 a = chart.add(Node(0, 1, "A"))

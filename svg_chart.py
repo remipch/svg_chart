@@ -104,14 +104,12 @@ class Chart:
                  node_width = 150,
                  node_height = 40,
                  horizontal_node_space = 50,
-                 vertical_node_space = 30,
-                 name = "chart"):
+                 vertical_node_space = 30):
         self.font_size  = font_size
         self.node_width  = node_width
         self.node_height  = node_height
         self.horizontal_node_space  = horizontal_node_space
         self.vertical_node_space  = vertical_node_space
-        self.name  = name
 
         self.all_nodes = []
         self.all_edges = []
@@ -120,7 +118,7 @@ class Chart:
         self.horizontal_step = node_width + horizontal_node_space
         self.vertical_step = node_height + vertical_node_space
 
-        print(F"New chart '{name}'")
+        print(F"New chart")
 
     def add(self, obj):
         if isinstance(obj, Node):
