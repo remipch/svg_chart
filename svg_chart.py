@@ -9,18 +9,52 @@ class Node:
         self.text = text
         self.color = color
         self.rounded = rounded
+        self.left_edges = []
+        self.right_edges = []
+        self.top_edges = []
+        self.bottom_edges = []
         print(F"New node '{text}'")
 
 class Edge:
-    def __init__(self, origin_node, destination_node, edge_string, text="", color="black"):
-        assert(origin_node is not None)
-        assert(destination_node is not None)
-        self.origin_node = origin_node
-        self.destination_node = destination_node
-        self.arrow = parseEdgeString(edge_string)
+    def __init__(self, node_a, node_b, edge_string, text="", color="black", right_left_borders=False):
+        assert(node_a is not None)
+        assert(node_b is not None)
+        arrow = parseEdgeString(edge_string)
+        self.dashed = arrow['dashed']
+        node_a_arrow = arrow['origin_arrow']
+        node_b_arrow = arrow['destination_arrow']
+
         self.text = text
         self.color = color
-        print(F"New edge '{text}' : '{origin_node.text}' '{edge_string}' '{destination_node.text}'")
+        self.right_left_borders = (node_a.col != node_b.col) and (right_left_borders or (node_a.row == node_b.row))
+
+        if self.right_left_borders:
+            if node_a.col < node_b.col:
+                self.left_node = node_a
+                self.right_node = node_b
+                self.left_arrow = node_a_arrow
+                self.right_arrow = node_b_arrow
+            else:
+                self.left_node = node_b
+                self.right_node = node_a
+                self.left_arrow = node_b_arrow
+                self.right_arrow = node_a_arrow
+            self.left_node.right_edges.append(self)
+            self.right_node.left_edges.append(self)
+        else:
+            if node_a.row < node_b.row:
+                self.top_node = node_a
+                self.bottom_node = node_b
+                self.top_arrow = node_a_arrow
+                self.bottom_arrow = node_b_arrow
+            else:
+                self.top_node = node_b
+                self.bottom_node = node_a
+                self.top_arrow = node_b_arrow
+                self.bottom_arrow = node_a_arrow
+            self.top_node.bottom_edges.append(self)
+            self.bottom_node.top_edges.append(self)
+        print(F"New edge '{text}' : '{node_a.text}' '{edge_string}' '{node_b.text}'")
 
 class Cluster:
     # Warning: nodes append order defines the paint order (last nodes will hide first ones)
@@ -119,56 +153,67 @@ class Chart:
                       dominant_baseline='middle',
                       font_family='Arial'))
 
-    def arrowBorderOffsetX(self, anchor_border, edge_position):
-        if anchor_border==AnchorBorder.LEFT:
-            return -self.node_width/2
-        elif anchor_border==AnchorBorder.RIGHT:
-            return self.node_width/2
-        else:
-            return self.node_width * (edge_position-0.5)
-
-    def arrowBorderOffsetY(self, anchor_border, edge_position):
-        if anchor_border==AnchorBorder.TOP:
-            return -self.node_height/2
-        elif anchor_border==AnchorBorder.BOTTOM:
-            return self.node_height/2
-        else:
-            return self.node_height * (edge_position-0.5)
-
     def drawEdge(self, drawing, edge):
+        if edge.right_left_borders:
+            left_border_x = edge.left_node.col * self.horizontal_step + self.node_width/2
+            left_border_y = edge.left_node.row * self.vertical_step
+            right_border_x = edge.right_node.col * self.horizontal_step - self.node_width/2
+            right_border_y = edge.right_node.row * self.vertical_step
+
+            dy_left = self.node_height * (edge.left_node.right_edges.index(edge) + 1) / (len(edge.left_node.right_edges) + 1) - self.node_height / 2
+            dy_right = self.node_height * (edge.right_node.left_edges.index(edge) + 1) / (len(edge.right_node.left_edges) + 1) - self.node_height / 2
+
+            origin_border_x = left_border_x
+            origin_border_y = left_border_y + dy_left
+            destination_border_x = right_border_x
+            destination_border_y = right_border_y + dy_right
+            origin_arrow = edge.left_arrow
+            destination_arrow = edge.right_arrow
+
+        else:
+            top_border_x = edge.top_node.col * self.horizontal_step
+            top_border_y = edge.top_node.row * self.vertical_step + self.node_height/2
+            bottom_border_x = edge.bottom_node.col * self.horizontal_step
+            bottom_border_y = edge.bottom_node.row * self.vertical_step - self.node_height/2
+
+            dx_top = self.node_width * (edge.top_node.bottom_edges.index(edge) + 1) / (len(edge.top_node.bottom_edges) + 1) - self.node_width / 2
+            dx_bottom = self.node_width * (edge.bottom_node.top_edges.index(edge) + 1) / (len(edge.bottom_node.top_edges) + 1) - self.node_width / 2
+
+            origin_border_x = top_border_x + dx_top
+            origin_border_y = top_border_y
+            destination_border_x = bottom_border_x + dx_bottom
+            destination_border_y = bottom_border_y
+            origin_arrow = edge.top_arrow
+            destination_arrow = edge.bottom_arrow
+
         arrow = draw.Marker(-9, -5, 2, 5, orient='auto-start-reverse')
         arrow.append(draw.Lines(-9, 3, -9, -3, 2, 0, fill=edge.color, close=True))
 
-        origin_x = edge.origin_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['origin_anchor_border'], edge.arrow['origin_edge_position'])
-        origin_y = edge.origin_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['origin_anchor_border'], edge.arrow['origin_edge_position'])
-        destination_x = edge.destination_node.col * self.horizontal_step + self.arrowBorderOffsetX(edge.arrow['destination_anchor_border'], edge.arrow['destination_edge_position'])
-        destination_y = edge.destination_node.row * self.vertical_step + self.arrowBorderOffsetY(edge.arrow['destination_anchor_border'], edge.arrow['destination_edge_position'])
-
-        drawing.append(draw.Line(origin_x, origin_y,
-                      destination_x, destination_y,
-                      stroke=edge.color,
-                      stroke_width=2,
-                      stroke_dasharray="7,4" if edge.arrow['dashed'] else None,
-                      fill='none',
-                      marker_start=arrow if edge.arrow['origin_arrow'] else None,
-                      marker_end=arrow if edge.arrow['destination_arrow'] else None))
+        drawing.append(draw.Line(origin_border_x, origin_border_y,
+                                 destination_border_x, destination_border_y,
+                                 stroke=edge.color,
+                                 stroke_width=2,
+                                 stroke_dasharray="7,4" if edge.dashed else None,
+                                 fill='none',
+                                 marker_start=arrow if origin_arrow else None,
+                                 marker_end=arrow if destination_arrow else None))
         drawing.append(draw.Text(edge.text,
-                      self.font_size,
-                      (origin_x + destination_x) / 2,
-                      (origin_y + destination_y) / 2,
-                      text_anchor='middle',
-                      dominant_baseline='middle',
-                      font_family='Arial',
-                      fill='white',
-                      stroke='white',
-                      stroke_width=4))
+                                 self.font_size,
+                                 (origin_border_x + destination_border_x) / 2,
+                                 (origin_border_y + destination_border_y) / 2,
+                                 text_anchor='middle',
+                                 dominant_baseline='middle',
+                                 font_family='Arial',
+                                 fill='white',
+                                 stroke='white',
+                                 stroke_width=4))
         drawing.append(draw.Text(edge.text,
-                      self.font_size,
-                      (origin_x + destination_x) / 2,
-                      (origin_y + destination_y) / 2,
-                      text_anchor='middle',
-                      dominant_baseline='middle',
-                      font_family='Arial'))
+                                 self.font_size,
+                                 (origin_border_x + destination_border_x) / 2,
+                                 (origin_border_y + destination_border_y) / 2,
+                                 text_anchor='middle',
+                                 dominant_baseline='middle',
+                                 font_family='Arial'))
 
     def getClusterRect(self, cluster):
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
@@ -199,6 +244,17 @@ class Chart:
                                  font_family='Arial',
                                  font_weight='bold'))
 
+    # Compute edge angle considering starting and ending at border center
+    # (without small border position adjustment)
+    def getEdgeAngle(self, edge):
+        if edge.right_left_borders:
+            y = self.vertical_step * (edge.right_node.row - edge.left_node.row)
+            x = self.horizontal_step * (edge.right_node.col - edge.left_node.col) - self.node_width
+        else:
+            y = self.vertical_step * (edge.bottom_node.row - edge.top_node.row) - self.node_height
+            x = self.horizontal_step * (edge.bottom_node.col - edge.top_node.col)
+        return math.atan2(y, x)
+
     def exportSvg(self, filename):
         # Compute drawing size by iterating all nodes and clusters
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
@@ -208,6 +264,14 @@ class Chart:
             englobing_rect.englobe(self.getClusterRect(cluster))
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
         print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
+
+        # Sort edges by angle for each node border
+        # It's used in 'drawEdge' to spread edged uniformly over node borders, ordered by edge angle
+        for node in self.all_nodes:
+            node.left_edges.sort(key=lambda edge: self.getEdgeAngle(edge), reverse=True)
+            node.right_edges.sort(key=lambda edge: self.getEdgeAngle(edge))
+            node.top_edges.sort(key=lambda edge: self.getEdgeAngle(edge))
+            node.bottom_edges.sort(key=lambda edge: self.getEdgeAngle(edge), reverse=True)
 
         # Create a new drawing
         d = draw.Drawing(englobing_rect.max_x-englobing_rect.min_x,
