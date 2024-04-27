@@ -1,6 +1,5 @@
 import drawsvg as draw
 import math
-from edge_string import parseEdgeString, AnchorBorder
 
 class Node:
     def __init__(self, col, row, text, color="white", rounded=False):
@@ -15,14 +14,20 @@ class Node:
         self.bottom_edges = []
         print(F"New node '{text}'")
 
+
+# edge_string format : [<]-[-][>]
+def parseEdgeString(edge_string):
+    node_a_arrow = edge_string.startswith("<")
+    node_b_arrow = edge_string.endswith(">")
+    dashed = "--" in edge_string
+
+    return (dashed, node_a_arrow, node_b_arrow)
+
 class Edge:
-    def __init__(self, node_a, node_b, edge_string, text="", color="black", right_left_borders=False):
+    def __init__(self, node_a, node_b, edge_string="-", text="", color="black", right_left_borders=False):
         assert(node_a is not None)
         assert(node_b is not None)
-        arrow = parseEdgeString(edge_string)
-        self.dashed = arrow['dashed']
-        node_a_arrow = arrow['origin_arrow']
-        node_b_arrow = arrow['destination_arrow']
+        (self.dashed, node_a_arrow, node_b_arrow) = parseEdgeString(edge_string)
 
         self.text = text
         self.color = color
