@@ -51,6 +51,25 @@ class Node:
                     (self.row * self.chart.vertical_step) - self.chart.node_height/2,
                     (self.row * self.chart.vertical_step) + self.chart.node_height/2)
 
+    def draw(self, drawing):
+        rx = self.chart.node_height/2 if self.rounded else 0
+        rect = self.getRect()
+        drawing.append(draw.Rectangle(rect.min_x,
+                                      rect.min_y,
+                                      rect.getWidth(),
+                                      rect.getHeight(),
+                                      fill=self.color,
+                                      stroke='black',
+                                      stroke_width=2,
+                                      rx=rx))
+        drawing.append(draw.Text(self.text,
+                      self.chart.font_size,
+                      self.col * self.chart.horizontal_step,
+                      self.row * self.chart.vertical_step,
+                      text_anchor='middle',
+                      dominant_baseline='middle',
+                      font_family='Arial'))
+
 
 # edge_string format : [<]-[-][>]
 def parseEdgeString(edge_string):
@@ -182,25 +201,6 @@ class Chart:
 
     def addCluster(self, cluster):
         self.all_clusters.append(cluster)
-
-    def drawNode(self, drawing, node):
-        rx = self.node_height/2 if node.rounded else 0
-        rect = node.getRect()
-        drawing.append(draw.Rectangle(rect.min_x,
-                                      rect.min_y,
-                                      rect.getWidth(),
-                                      rect.getHeight(),
-                                      fill=node.color,
-                                      stroke='black',
-                                      stroke_width=2,
-                                      rx=rx))
-        drawing.append(draw.Text(node.text,
-                      self.font_size,
-                      node.col * self.horizontal_step,
-                      node.row * self.vertical_step,
-                      text_anchor='middle',
-                      dominant_baseline='middle',
-                      font_family='Arial'))
 
     def drawEdge(self, drawing, edge):
         if edge.layout == EdgeLayout.HORIZONTAL:
@@ -341,7 +341,7 @@ class Chart:
         for edge in self.all_edges:
             self.drawEdge(d, edge)
         for node in self.all_nodes:
-            self.drawNode(d, node)
+            node.draw(d)
 
         # Finally save
         d.save_svg(filename)
