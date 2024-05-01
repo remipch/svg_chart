@@ -215,6 +215,28 @@ class Cluster:
         englobing_rect.enlarge(self.margin_x, self.margin_y)
         return englobing_rect
 
+    def draw(self, drawing):
+        englobing_rect = self.getRect()
+
+        rx = self.chart.node_height/2 if self.rounded else 0
+        drawing.append(draw.Rectangle(englobing_rect.min_x,
+                                      englobing_rect.min_y,
+                                      englobing_rect.getWidth(),
+                                      englobing_rect.getHeight(),
+                                      fill=self.color,
+                                      stroke='black',
+                                      stroke_width=2,
+                                      rx=rx))
+
+        drawing.append(draw.Text(self.text,
+                                 self.chart.font_size,
+                                 englobing_rect.min_x,
+                                 englobing_rect.min_y,
+                                 text_anchor='start',
+                                 dominant_baseline='text-after-edge',
+                                 font_family='Arial',
+                                 font_weight='bold'))
+
 class Rect:
     def __init__(self, min_x, max_x, min_y, max_y):
         self.min_x = min_x
@@ -271,28 +293,6 @@ class Chart:
     def addCluster(self, cluster):
         self.all_clusters.append(cluster)
 
-    def drawCluster(self, drawing, cluster):
-        englobing_rect = cluster.getRect()
-
-        rx = self.node_height/2 if cluster.rounded else 0
-        drawing.append(draw.Rectangle(englobing_rect.min_x,
-                                      englobing_rect.min_y,
-                                      englobing_rect.getWidth(),
-                                      englobing_rect.getHeight(),
-                                      fill=cluster.color,
-                                      stroke='black',
-                                      stroke_width=2,
-                                      rx=rx))
-
-        drawing.append(draw.Text(cluster.text,
-                                 self.font_size,
-                                 englobing_rect.min_x,
-                                 englobing_rect.min_y,
-                                 text_anchor='start',
-                                 dominant_baseline='text-after-edge',
-                                 font_family='Arial',
-                                 font_weight='bold'))
-
     # Compute edge angle considering starting and ending at border center
     # (without small border position adjustment)
     def getEdgeAngle(self, edge):
@@ -337,7 +337,7 @@ class Chart:
 
         # Draw all elements
         for cluster in self.all_clusters:
-            self.drawCluster(d, cluster)
+            cluster.draw(d)
         for edge in self.all_edges:
             edge.draw(d)
         for node in self.all_nodes:
