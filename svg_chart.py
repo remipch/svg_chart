@@ -29,6 +29,12 @@ class EdgeLayout(Enum):
     VERTICAL = 1
     HORIZONTAL = 2
 
+class Border(Enum):
+    LEFT = 0
+    TOP = 1
+    RIGHT = 2
+    BOTTOM = 3
+
 class Node:
     def __init__(self, chart, col, row, text, color="white", rounded=False):
         self.col = col
@@ -36,14 +42,26 @@ class Node:
         self.text = text
         self.color = color
         self.rounded = rounded
-        self.left_edges = []
-        self.right_edges = []
-        self.top_edges = []
-        self.bottom_edges = []
+        self.edges = {Border.LEFT: [], Border.TOP: [], Border.RIGHT: [], Border.BOTTOM: []}
 
         self.chart = chart
         chart.addNode(self)
         print(F"New node '{text}'")
+
+    def addEdge(self, border, angle, edge):
+        self.edges[border].append((angle, edge))
+
+        # Sort edges by angle
+        self.edges[border] = sorted(self.edges[border], key=lambda x: x[0])
+
+    def getEdgeCount(self, border):
+        return len(self.edges[border])
+
+    def getEdgeIndex(self, border, edge):
+        for i, angle_and_edge in enumerate(self.edges[border]):
+            if angle_and_edge[1] == edge:
+                return i
+        return None
 
     def getRect(self):
         return Rect((self.col * self.chart.horizontal_step) - self.chart.node_width/2,
@@ -111,8 +129,13 @@ class Edge:
                 self.right_node = node_a
                 self.left_arrow = node_b_arrow
                 self.right_arrow = node_a_arrow
-            self.left_node.right_edges.append(self)
-            self.right_node.left_edges.append(self)
+            self.x1 = self.left_node.col * chart.horizontal_step + chart.node_width/2
+            self.y1 = self.left_node.row * chart.vertical_step
+            self.x2 = self.right_node.col * chart.horizontal_step - chart.node_width/2
+            self.y2 = self.right_node.row * chart.vertical_step
+            edge_angle = math.atan2(self.y2 - self.y1, self.x2 - self.x1)
+            self.left_node.addEdge(Border.RIGHT, edge_angle, self)
+            self.right_node.addEdge(Border.LEFT, -edge_angle, self)
         elif self.layout==EdgeLayout.VERTICAL:
             if node_a.row < node_b.row:
                 self.top_node = node_a
@@ -124,8 +147,13 @@ class Edge:
                 self.bottom_node = node_a
                 self.top_arrow = node_b_arrow
                 self.bottom_arrow = node_a_arrow
-            self.top_node.bottom_edges.append(self)
-            self.bottom_node.top_edges.append(self)
+            self.x1 = self.top_node.col * chart.horizontal_step
+            self.y1 = self.top_node.row * chart.vertical_step + chart.node_height/2
+            self.x2 = self.bottom_node.col * chart.horizontal_step
+            self.y2 = self.bottom_node.row * chart.vertical_step - chart.node_height/2
+            edge_angle = math.atan2(self.y2 - self.y1, self.x2 - self.x1)
+            self.top_node.addEdge(Border.BOTTOM, -edge_angle, self)
+            self.bottom_node.addEdge(Border.TOP, edge_angle, self)
 
         self.chart = chart
         chart.addEdge(self)
@@ -133,42 +161,31 @@ class Edge:
 
     def draw(self, drawing):
         if self.layout == EdgeLayout.HORIZONTAL:
-            left_border_x = self.left_node.col * self.chart.horizontal_step + self.chart.node_width/2
-            left_border_y = self.left_node.row * self.chart.vertical_step
-            right_border_x = self.right_node.col * self.chart.horizontal_step - self.chart.node_width/2
-            right_border_y = self.right_node.row * self.chart.vertical_step
+            dy_left = self.chart.node_height * (self.left_node.getEdgeIndex(Border.RIGHT, self) + 1) / (self.left_node.getEdgeCount(Border.RIGHT) + 1) - self.chart.node_height / 2
+            dy_right = self.chart.node_height * (self.right_node.getEdgeIndex(Border.LEFT, self) + 1) / (self.right_node.getEdgeCount(Border.LEFT) + 1) - self.chart.node_height / 2
 
-            dy_left = self.chart.node_height * (self.left_node.right_edges.index(self) + 1) / (len(self.left_node.right_edges) + 1) - self.chart.node_height / 2
-            dy_right = self.chart.node_height * (self.right_node.left_edges.index(self) + 1) / (len(self.right_node.left_edges) + 1) - self.chart.node_height / 2
-
-            origin_border_x = left_border_x
-            origin_border_y = left_border_y + dy_left
-            destination_border_x = right_border_x
-            destination_border_y = right_border_y + dy_right
+            x1 = self.x1
+            y1 = self.y1 + dy_left
+            x2 = self.x2
+            y2 = self.y2 + dy_right
             origin_arrow = self.left_arrow
             destination_arrow = self.right_arrow
 
         elif self.layout==EdgeLayout.VERTICAL:
-            top_border_x = self.top_node.col * self.chart.horizontal_step
-            top_border_y = self.top_node.row * self.chart.vertical_step + self.chart.node_height/2
-            bottom_border_x = self.bottom_node.col * self.chart.horizontal_step
-            bottom_border_y = self.bottom_node.row * self.chart.vertical_step - self.chart.node_height/2
+            dx_top = self.chart.node_width * (self.top_node.getEdgeIndex(Border.BOTTOM, self) + 1) / (self.top_node.getEdgeCount(Border.BOTTOM) + 1) - self.chart.node_width / 2
+            dx_bottom = self.chart.node_width * (self.bottom_node.getEdgeIndex(Border.TOP, self) + 1) / (self.bottom_node.getEdgeCount(Border.TOP) + 1) - self.chart.node_width / 2
 
-            dx_top = self.chart.node_width * (self.top_node.bottom_edges.index(self) + 1) / (len(self.top_node.bottom_edges) + 1) - self.chart.node_width / 2
-            dx_bottom = self.chart.node_width * (self.bottom_node.top_edges.index(self) + 1) / (len(self.bottom_node.top_edges) + 1) - self.chart.node_width / 2
-
-            origin_border_x = top_border_x + dx_top
-            origin_border_y = top_border_y
-            destination_border_x = bottom_border_x + dx_bottom
-            destination_border_y = bottom_border_y
+            x1 = self.x1 + dx_top
+            y1 = self.y1
+            x2 = self.x2 + dx_bottom
+            y2 = self.y2
             origin_arrow = self.top_arrow
             destination_arrow = self.bottom_arrow
 
         arrow = draw.Marker(-9, -5, 2, 5, orient='auto-start-reverse')
         arrow.append(draw.Lines(-9, 3, -9, -3, 2, 0, fill=self.color, close=True))
 
-        drawing.append(draw.Line(origin_border_x, origin_border_y,
-                                 destination_border_x, destination_border_y,
+        drawing.append(draw.Line(x1, y1, x2, y2,
                                  stroke=self.color,
                                  stroke_width=2,
                                  stroke_dasharray="7,4" if self.dashed else None,
@@ -177,8 +194,8 @@ class Edge:
                                  marker_end=arrow if destination_arrow else None))
         drawing.append(draw.Text(self.text,
                                  self.chart.font_size,
-                                 (origin_border_x + destination_border_x) / 2,
-                                 (origin_border_y + destination_border_y) / 2,
+                                 (x1 + x2) / 2,
+                                 (y1 + y2) / 2,
                                  text_anchor='middle',
                                  dominant_baseline='middle',
                                  font_family='Arial',
@@ -187,8 +204,8 @@ class Edge:
                                  stroke_width=4))
         drawing.append(draw.Text(self.text,
                                  self.chart.font_size,
-                                 (origin_border_x + destination_border_x) / 2,
-                                 (origin_border_y + destination_border_y) / 2,
+                                 (x1 + x2) / 2,
+                                 (y1 + y2) / 2,
                                  text_anchor='middle',
                                  dominant_baseline='middle',
                                  font_family='Arial'))
@@ -293,17 +310,6 @@ class Chart:
     def addCluster(self, cluster):
         self.all_clusters.append(cluster)
 
-    # Compute edge angle considering starting and ending at border center
-    # (without small border position adjustment)
-    def getEdgeAngle(self, edge):
-        if edge.layout == EdgeLayout.HORIZONTAL:
-            y = self.vertical_step * (edge.right_node.row - edge.left_node.row)
-            x = self.horizontal_step * (edge.right_node.col - edge.left_node.col) - self.node_width
-        elif edge.layout==EdgeLayout.VERTICAL:
-            y = self.vertical_step * (edge.bottom_node.row - edge.top_node.row) - self.node_height
-            x = self.horizontal_step * (edge.bottom_node.col - edge.top_node.col)
-        return math.atan2(y, x)
-
     def exportSvg(self, filename):
         # Compute drawing size by iterating all nodes and clusters
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
@@ -313,14 +319,6 @@ class Chart:
             englobing_rect.englobe(cluster.getRect())
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
         print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
-
-        # Sort edges by angle for each node border
-        # It's used in 'drawEdge' to spread edged uniformly over node borders, ordered by edge angle
-        for node in self.all_nodes:
-            node.left_edges.sort(key=lambda edge: self.getEdgeAngle(edge), reverse=True)
-            node.right_edges.sort(key=lambda edge: self.getEdgeAngle(edge))
-            node.top_edges.sort(key=lambda edge: self.getEdgeAngle(edge))
-            node.bottom_edges.sort(key=lambda edge: self.getEdgeAngle(edge), reverse=True)
 
         # Create a new drawing
         d = draw.Drawing(englobing_rect.max_x-englobing_rect.min_x,
