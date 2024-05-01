@@ -53,9 +53,9 @@
 <text x="550.0" y="390.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
 <text x="550.0" y="390.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
 <rect x="325.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="400" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">top_bottom</text>
+<text x="400" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">VERTICAL</text>
 <rect x="325.0" y="330.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="400" y="350" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">left_right</text>
+<text x="400" y="350" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">HORIZONTAL</text>
 <rect x="-75.0" y="155.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="0" y="175.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">-</text>
 <rect x="125.0" y="155.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />

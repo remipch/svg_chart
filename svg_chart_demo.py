@@ -40,17 +40,17 @@ chart.exportSvg("node_demo.svg")
 
 chart = Chart()
 
-tb = chart.add(Node(2, 0, "top_bottom"))
-lr = chart.add(Node(2, 5, "left_right"))
+tb = chart.add(Node(2, 0, "VERTICAL"))
+lr = chart.add(Node(2, 5, "HORIZONTAL"))
 
 for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
     chart.add(Edge(tb,chart.add(Node(i, 2.5, edge_string)),edge_string))
 
-chart.add(Edge(lr,chart.add(Node(0.5, 4, "-")),"-", right_left_borders=True))
-chart.add(Edge(lr,chart.add(Node(0.5, 6, "--")),"--", right_left_borders=True))
-chart.add(Edge(lr,chart.add(Node(3.5, 4, "<-")),"<-", color="#d00000", right_left_borders=True))
-chart.add(Edge(lr,chart.add(Node(3.5, 5, "->")),"->", color="#00aa00", right_left_borders=True))
-chart.add(Edge(lr,chart.add(Node(3.5, 6, "<->")),"<->", right_left_borders=True))
+chart.add(Edge(lr,chart.add(Node(0.5, 4, "-")),"-", layout=EdgeLayout.HORIZONTAL))
+chart.add(Edge(lr,chart.add(Node(0.5, 6, "--")),"--", layout=EdgeLayout.HORIZONTAL))
+chart.add(Edge(lr,chart.add(Node(3.5, 4, "<-")),"<-", color="#d00000", layout=EdgeLayout.HORIZONTAL))
+chart.add(Edge(lr,chart.add(Node(3.5, 5, "->")),"->", color="#00aa00", layout=EdgeLayout.HORIZONTAL))
+chart.add(Edge(lr,chart.add(Node(3.5, 6, "<->")),"<->", layout=EdgeLayout.HORIZONTAL))
 
 chart.exportSvg("edge_demo.svg")
 

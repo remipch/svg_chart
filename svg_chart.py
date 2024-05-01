@@ -22,6 +22,12 @@
 
 import drawsvg as draw
 import math
+from enum import Enum
+
+class EdgeLayout(Enum):
+    AUTO = 0
+    VERTICAL = 1
+    HORIZONTAL = 2
 
 class Node:
     def __init__(self, col, row, text, color="white", rounded=False):
@@ -46,16 +52,27 @@ def parseEdgeString(edge_string):
     return (dashed, node_a_arrow, node_b_arrow)
 
 class Edge:
-    def __init__(self, node_a, node_b, edge_string="-", text="", color="black", right_left_borders=False):
+    def __init__(self, node_a, node_b, edge_string="-", text="", color="black", layout=EdgeLayout.AUTO):
         assert(node_a is not None)
         assert(node_b is not None)
         (self.dashed, node_a_arrow, node_b_arrow) = parseEdgeString(edge_string)
 
         self.text = text
         self.color = color
-        self.right_left_borders = (node_a.col != node_b.col) and (right_left_borders or (node_a.row == node_b.row))
+        if layout==EdgeLayout.AUTO:
+            # VERTICAL by default, fallback to HORIZONTAL only if nodes are on the same row
+            if node_a.row == node_b.row:
+                self.layout = EdgeLayout.HORIZONTAL
+            else:
+                self.layout = EdgeLayout.VERTICAL
+        elif layout==EdgeLayout.VERTICAL:
+            assert(node_a.row != node_b.row)
+            self.layout = EdgeLayout.VERTICAL
+        elif layout==EdgeLayout.HORIZONTAL:
+            assert(node_a.col != node_b.col)
+            self.layout = EdgeLayout.HORIZONTAL
 
-        if self.right_left_borders:
+        if self.layout == EdgeLayout.HORIZONTAL:
             if node_a.col < node_b.col:
                 self.left_node = node_a
                 self.right_node = node_b
@@ -68,7 +85,7 @@ class Edge:
                 self.right_arrow = node_a_arrow
             self.left_node.right_edges.append(self)
             self.right_node.left_edges.append(self)
-        else:
+        elif self.layout==EdgeLayout.VERTICAL:
             if node_a.row < node_b.row:
                 self.top_node = node_a
                 self.bottom_node = node_b
@@ -179,7 +196,7 @@ class Chart:
                       font_family='Arial'))
 
     def drawEdge(self, drawing, edge):
-        if edge.right_left_borders:
+        if edge.layout == EdgeLayout.HORIZONTAL:
             left_border_x = edge.left_node.col * self.horizontal_step + self.node_width/2
             left_border_y = edge.left_node.row * self.vertical_step
             right_border_x = edge.right_node.col * self.horizontal_step - self.node_width/2
@@ -195,7 +212,7 @@ class Chart:
             origin_arrow = edge.left_arrow
             destination_arrow = edge.right_arrow
 
-        else:
+        elif edge.layout==EdgeLayout.VERTICAL:
             top_border_x = edge.top_node.col * self.horizontal_step
             top_border_y = edge.top_node.row * self.vertical_step + self.node_height/2
             bottom_border_x = edge.bottom_node.col * self.horizontal_step
@@ -272,10 +289,10 @@ class Chart:
     # Compute edge angle considering starting and ending at border center
     # (without small border position adjustment)
     def getEdgeAngle(self, edge):
-        if edge.right_left_borders:
+        if edge.layout == EdgeLayout.HORIZONTAL:
             y = self.vertical_step * (edge.right_node.row - edge.left_node.row)
             x = self.horizontal_step * (edge.right_node.col - edge.left_node.col) - self.node_width
-        else:
+        elif edge.layout==EdgeLayout.VERTICAL:
             y = self.vertical_step * (edge.bottom_node.row - edge.top_node.row) - self.node_height
             x = self.horizontal_step * (edge.bottom_node.col - edge.top_node.col)
         return math.atan2(y, x)
