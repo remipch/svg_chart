@@ -208,6 +208,13 @@ class Cluster:
         chart.addCluster(self)
         print(F"New cluster '{text}'")
 
+    def getRect(self):
+        englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
+        for node in self.nodes:
+            englobing_rect.englobe(node.getRect())
+        englobing_rect.enlarge(self.margin_x, self.margin_y)
+        return englobing_rect
+
 class Rect:
     def __init__(self, min_x, max_x, min_y, max_y):
         self.min_x = min_x
@@ -264,15 +271,8 @@ class Chart:
     def addCluster(self, cluster):
         self.all_clusters.append(cluster)
 
-    def getClusterRect(self, cluster):
-        englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
-        for node in cluster.nodes:
-            englobing_rect.englobe(node.getRect())
-        englobing_rect.enlarge(cluster.margin_x, cluster.margin_y)
-        return englobing_rect
-
     def drawCluster(self, drawing, cluster):
-        englobing_rect = self.getClusterRect(cluster)
+        englobing_rect = cluster.getRect()
 
         rx = self.node_height/2 if cluster.rounded else 0
         drawing.append(draw.Rectangle(englobing_rect.min_x,
@@ -310,7 +310,7 @@ class Chart:
         for node in self.all_nodes:
             englobing_rect.englobe(node.getRect())
         for cluster in self.all_clusters:
-            englobing_rect.englobe(self.getClusterRect(cluster))
+            englobing_rect.englobe(cluster.getRect())
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
         print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
 
