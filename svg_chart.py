@@ -45,6 +45,12 @@ class Node:
         chart.addNode(self)
         print(F"New node '{text}'")
 
+    def getRect(self):
+        return Rect((self.col * self.chart.horizontal_step) - self.chart.node_width/2,
+                    (self.col * self.chart.horizontal_step) + self.chart.node_width/2,
+                    (self.row * self.chart.vertical_step) - self.chart.node_height/2,
+                    (self.row * self.chart.vertical_step) + self.chart.node_height/2)
+
 
 # edge_string format : [<]-[-][>]
 def parseEdgeString(edge_string):
@@ -177,15 +183,9 @@ class Chart:
     def addCluster(self, cluster):
         self.all_clusters.append(cluster)
 
-    def getNodeRect(self, node):
-        return Rect((node.col * self.horizontal_step) - self.node_width/2,
-                    (node.col * self.horizontal_step) + self.node_width/2,
-                    (node.row * self.vertical_step) - self.node_height/2,
-                    (node.row * self.vertical_step) + self.node_height/2)
-
     def drawNode(self, drawing, node):
         rx = self.node_height/2 if node.rounded else 0
-        rect = self.getNodeRect(node)
+        rect = node.getRect()
         drawing.append(draw.Rectangle(rect.min_x,
                                       rect.min_y,
                                       rect.getWidth(),
@@ -267,7 +267,7 @@ class Chart:
     def getClusterRect(self, cluster):
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
         for node in cluster.nodes:
-            englobing_rect.englobe(self.getNodeRect(node))
+            englobing_rect.englobe(node.getRect())
         englobing_rect.enlarge(cluster.margin_x, cluster.margin_y)
         return englobing_rect
 
@@ -308,7 +308,7 @@ class Chart:
         # Compute drawing size by iterating all nodes and clusters
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
         for node in self.all_nodes:
-            englobing_rect.englobe(self.getNodeRect(node))
+            englobing_rect.englobe(node.getRect())
         for cluster in self.all_clusters:
             englobing_rect.englobe(self.getClusterRect(cluster))
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
