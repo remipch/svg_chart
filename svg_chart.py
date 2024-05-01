@@ -131,6 +131,68 @@ class Edge:
         chart.addEdge(self)
         print(F"New edge '{text}' : '{node_a.text}' '{edge_string}' '{node_b.text}'")
 
+    def draw(self, drawing):
+        if self.layout == EdgeLayout.HORIZONTAL:
+            left_border_x = self.left_node.col * self.chart.horizontal_step + self.chart.node_width/2
+            left_border_y = self.left_node.row * self.chart.vertical_step
+            right_border_x = self.right_node.col * self.chart.horizontal_step - self.chart.node_width/2
+            right_border_y = self.right_node.row * self.chart.vertical_step
+
+            dy_left = self.chart.node_height * (self.left_node.right_edges.index(self) + 1) / (len(self.left_node.right_edges) + 1) - self.chart.node_height / 2
+            dy_right = self.chart.node_height * (self.right_node.left_edges.index(self) + 1) / (len(self.right_node.left_edges) + 1) - self.chart.node_height / 2
+
+            origin_border_x = left_border_x
+            origin_border_y = left_border_y + dy_left
+            destination_border_x = right_border_x
+            destination_border_y = right_border_y + dy_right
+            origin_arrow = self.left_arrow
+            destination_arrow = self.right_arrow
+
+        elif self.layout==EdgeLayout.VERTICAL:
+            top_border_x = self.top_node.col * self.chart.horizontal_step
+            top_border_y = self.top_node.row * self.chart.vertical_step + self.chart.node_height/2
+            bottom_border_x = self.bottom_node.col * self.chart.horizontal_step
+            bottom_border_y = self.bottom_node.row * self.chart.vertical_step - self.chart.node_height/2
+
+            dx_top = self.chart.node_width * (self.top_node.bottom_edges.index(self) + 1) / (len(self.top_node.bottom_edges) + 1) - self.chart.node_width / 2
+            dx_bottom = self.chart.node_width * (self.bottom_node.top_edges.index(self) + 1) / (len(self.bottom_node.top_edges) + 1) - self.chart.node_width / 2
+
+            origin_border_x = top_border_x + dx_top
+            origin_border_y = top_border_y
+            destination_border_x = bottom_border_x + dx_bottom
+            destination_border_y = bottom_border_y
+            origin_arrow = self.top_arrow
+            destination_arrow = self.bottom_arrow
+
+        arrow = draw.Marker(-9, -5, 2, 5, orient='auto-start-reverse')
+        arrow.append(draw.Lines(-9, 3, -9, -3, 2, 0, fill=self.color, close=True))
+
+        drawing.append(draw.Line(origin_border_x, origin_border_y,
+                                 destination_border_x, destination_border_y,
+                                 stroke=self.color,
+                                 stroke_width=2,
+                                 stroke_dasharray="7,4" if self.dashed else None,
+                                 fill='none',
+                                 marker_start=arrow if origin_arrow else None,
+                                 marker_end=arrow if destination_arrow else None))
+        drawing.append(draw.Text(self.text,
+                                 self.chart.font_size,
+                                 (origin_border_x + destination_border_x) / 2,
+                                 (origin_border_y + destination_border_y) / 2,
+                                 text_anchor='middle',
+                                 dominant_baseline='middle',
+                                 font_family='Arial',
+                                 fill='white',
+                                 stroke='white',
+                                 stroke_width=4))
+        drawing.append(draw.Text(self.text,
+                                 self.chart.font_size,
+                                 (origin_border_x + destination_border_x) / 2,
+                                 (origin_border_y + destination_border_y) / 2,
+                                 text_anchor='middle',
+                                 dominant_baseline='middle',
+                                 font_family='Arial'))
+
 class Cluster:
     # Warning: nodes append order defines the paint order (last nodes will hide first ones)
     def __init__(self, chart, nodes, text="", margin_x=15, margin_y=15, color="none", rounded=False):
@@ -201,68 +263,6 @@ class Chart:
 
     def addCluster(self, cluster):
         self.all_clusters.append(cluster)
-
-    def drawEdge(self, drawing, edge):
-        if edge.layout == EdgeLayout.HORIZONTAL:
-            left_border_x = edge.left_node.col * self.horizontal_step + self.node_width/2
-            left_border_y = edge.left_node.row * self.vertical_step
-            right_border_x = edge.right_node.col * self.horizontal_step - self.node_width/2
-            right_border_y = edge.right_node.row * self.vertical_step
-
-            dy_left = self.node_height * (edge.left_node.right_edges.index(edge) + 1) / (len(edge.left_node.right_edges) + 1) - self.node_height / 2
-            dy_right = self.node_height * (edge.right_node.left_edges.index(edge) + 1) / (len(edge.right_node.left_edges) + 1) - self.node_height / 2
-
-            origin_border_x = left_border_x
-            origin_border_y = left_border_y + dy_left
-            destination_border_x = right_border_x
-            destination_border_y = right_border_y + dy_right
-            origin_arrow = edge.left_arrow
-            destination_arrow = edge.right_arrow
-
-        elif edge.layout==EdgeLayout.VERTICAL:
-            top_border_x = edge.top_node.col * self.horizontal_step
-            top_border_y = edge.top_node.row * self.vertical_step + self.node_height/2
-            bottom_border_x = edge.bottom_node.col * self.horizontal_step
-            bottom_border_y = edge.bottom_node.row * self.vertical_step - self.node_height/2
-
-            dx_top = self.node_width * (edge.top_node.bottom_edges.index(edge) + 1) / (len(edge.top_node.bottom_edges) + 1) - self.node_width / 2
-            dx_bottom = self.node_width * (edge.bottom_node.top_edges.index(edge) + 1) / (len(edge.bottom_node.top_edges) + 1) - self.node_width / 2
-
-            origin_border_x = top_border_x + dx_top
-            origin_border_y = top_border_y
-            destination_border_x = bottom_border_x + dx_bottom
-            destination_border_y = bottom_border_y
-            origin_arrow = edge.top_arrow
-            destination_arrow = edge.bottom_arrow
-
-        arrow = draw.Marker(-9, -5, 2, 5, orient='auto-start-reverse')
-        arrow.append(draw.Lines(-9, 3, -9, -3, 2, 0, fill=edge.color, close=True))
-
-        drawing.append(draw.Line(origin_border_x, origin_border_y,
-                                 destination_border_x, destination_border_y,
-                                 stroke=edge.color,
-                                 stroke_width=2,
-                                 stroke_dasharray="7,4" if edge.dashed else None,
-                                 fill='none',
-                                 marker_start=arrow if origin_arrow else None,
-                                 marker_end=arrow if destination_arrow else None))
-        drawing.append(draw.Text(edge.text,
-                                 self.font_size,
-                                 (origin_border_x + destination_border_x) / 2,
-                                 (origin_border_y + destination_border_y) / 2,
-                                 text_anchor='middle',
-                                 dominant_baseline='middle',
-                                 font_family='Arial',
-                                 fill='white',
-                                 stroke='white',
-                                 stroke_width=4))
-        drawing.append(draw.Text(edge.text,
-                                 self.font_size,
-                                 (origin_border_x + destination_border_x) / 2,
-                                 (origin_border_y + destination_border_y) / 2,
-                                 text_anchor='middle',
-                                 dominant_baseline='middle',
-                                 font_family='Arial'))
 
     def getClusterRect(self, cluster):
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
@@ -339,7 +339,7 @@ class Chart:
         for cluster in self.all_clusters:
             self.drawCluster(d, cluster)
         for edge in self.all_edges:
-            self.drawEdge(d, edge)
+            edge.draw(d)
         for node in self.all_nodes:
             node.draw(d)
 
