@@ -30,7 +30,7 @@ class EdgeLayout(Enum):
     HORIZONTAL = 2
 
 class Node:
-    def __init__(self, col, row, text, color="white", rounded=False):
+    def __init__(self, chart, col, row, text, color="white", rounded=False):
         self.col = col
         self.row = row
         self.text = text
@@ -40,6 +40,9 @@ class Node:
         self.right_edges = []
         self.top_edges = []
         self.bottom_edges = []
+
+        self.chart = chart
+        chart.addNode(self)
         print(F"New node '{text}'")
 
 
@@ -52,7 +55,7 @@ def parseEdgeString(edge_string):
     return (dashed, node_a_arrow, node_b_arrow)
 
 class Edge:
-    def __init__(self, node_a, node_b, edge_string="-", text="", color="black", layout=EdgeLayout.AUTO):
+    def __init__(self, chart, node_a, node_b, edge_string="-", text="", color="black", layout=EdgeLayout.AUTO):
         assert(node_a is not None)
         assert(node_b is not None)
         (self.dashed, node_a_arrow, node_b_arrow) = parseEdgeString(edge_string)
@@ -98,11 +101,14 @@ class Edge:
                 self.bottom_arrow = node_a_arrow
             self.top_node.bottom_edges.append(self)
             self.bottom_node.top_edges.append(self)
+
+        self.chart = chart
+        chart.addEdge(self)
         print(F"New edge '{text}' : '{node_a.text}' '{edge_string}' '{node_b.text}'")
 
 class Cluster:
     # Warning: nodes append order defines the paint order (last nodes will hide first ones)
-    def __init__(self, nodes, text="", margin_x=15, margin_y=15, color="none", rounded=False):
+    def __init__(self, chart, nodes, text="", margin_x=15, margin_y=15, color="none", rounded=False):
         assert(len(nodes)>0)
         self.nodes = nodes
         self.text = text
@@ -110,6 +116,9 @@ class Cluster:
         self.margin_y = margin_y
         self.color = color
         self.rounded = rounded
+
+        self.chart = chart
+        chart.addCluster(self)
         print(F"New cluster '{text}'")
 
 class Rect:
@@ -159,16 +168,14 @@ class Chart:
 
         print(F"New chart")
 
-    def add(self, obj):
-        if isinstance(obj, Node):
-            self.all_nodes.append(obj)
-        elif isinstance(obj, Edge):
-            self.all_edges.append(obj)
-        elif isinstance(obj, Cluster):
-            self.all_clusters.append(obj)
-        else:
-            raise TypeError("Unsupported type")
-        return obj
+    def addNode(self, node):
+        self.all_nodes.append(node)
+
+    def addEdge(self, edge):
+        self.all_edges.append(edge)
+
+    def addCluster(self, cluster):
+        self.all_clusters.append(cluster)
 
     def getNodeRect(self, node):
         return Rect((node.col * self.horizontal_step) - self.node_width/2,

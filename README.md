@@ -11,19 +11,19 @@ from svg_chart import *
 
 chart = Chart()
 
-a = chart.add(Node(0.5, 0, "A"))
-b = chart.add(Node(0, 2, "B", color="#bcd7ff"))
-c = chart.add(Node(0, 3, "C", rounded=True))
-d = chart.add(Node(1, 2, "D"))
-e = chart.add(Node(2, 2, "E"))
+a = Node(chart, 0.5, 0, "A")
+b = Node(chart, 0, 2, "B", color="#bcd7ff")
+c = Node(chart, 0, 3, "C", rounded=True)
+d = Node(chart, 1, 2, "D")
+e = Node(chart, 2, 2, "E")
 
-chart.add(Edge(a, b, "->"))
-chart.add(Edge(b, c))
-chart.add(Edge(a, d, "--"))
-chart.add(Edge(d, e, "<->"))
+Edge(chart, a, b, "->")
+Edge(chart, b, c)
+Edge(chart, a, d, "--")
+Edge(chart, d, e, "<->")
 
-chart.add(Cluster([b,c]))
-chart.add(Cluster([d,e], color="#efffb9"))
+Cluster(chart, [b,c])
+Cluster(chart, [d,e], color="#efffb9")
 
 chart.exportSvg("simple_demo.svg")
 ```
