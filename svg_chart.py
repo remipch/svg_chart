@@ -225,6 +225,16 @@ class Edge:
         chart.addEdge(self)
         print(F"New edge '{text}' : '{node_a.text}' '{edge_string}' '{node_b.text}'")
 
+    def getRect(self):
+        if self.layout == EdgeLayout.HORIZONTAL:
+            (x1, y1) = self.left_node.getEdgePointOnBorder(self.left_node_border, self)
+            (x2, y2) = self.right_node.getEdgePointOnBorder(self.right_node_border, self)
+        elif self.layout==EdgeLayout.VERTICAL:
+            (x1, y1) = self.top_node.getEdgePointOnBorder(self.top_node_border, self)
+            (x2, y2) = self.bottom_node.getEdgePointOnBorder(self.bottom_node_border, self)
+
+        return Rect(min(x1,self.xc,x2), max(x1,self.xc,x2), min(y1,self.yc,y2), max(y1,self.yc,y2))
+
     def draw(self, drawing):
         arrow_length = 8
         arrow = draw.Marker(-arrow_length, -5, 2, 5, orient='auto-start-reverse')
@@ -403,10 +413,8 @@ class Chart:
     def exportSvg(self, filename):
         # Compute drawing size by iterating all nodes and clusters
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
-        for node in self.all_nodes:
-            englobing_rect.englobe(node.getRect())
-        for cluster in self.all_clusters:
-            englobing_rect.englobe(cluster.getRect())
+        for child in self.all_clusters+self.all_edges+self.all_nodes:
+            englobing_rect.englobe(child.getRect())
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
         print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
 
@@ -423,7 +431,7 @@ class Chart:
                                       fill='white',
                                       stroke='none'))
 
-        # Draw all elements
+        # Draw all elements (order is important to not hide children by their parent elements)
         for cluster in self.all_clusters:
             cluster.draw(d)
         for edge in self.all_edges:
