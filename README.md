@@ -21,9 +21,10 @@ Edge(chart, a, b, "->")
 Edge(chart, b, c)
 Edge(chart, a, d, "--")
 Edge(chart, d, e, "<->")
+bc = Edge(chart, b, c, "<-", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BEFORE)
 
-Cluster(chart, [b,c])
 Cluster(chart, [d,e], color="#efffb9")
+Cluster(chart, [b, c, bc])
 
 chart.exportSvg("simple_demo.svg")
 ```
@@ -46,11 +47,62 @@ A few optionnal parameters allow to change edge layout and apparence.
 
 ![Edges](edge_demo.svg)
 
+``` python
+tb = Node(chart, 2, 0, "VERTICAL")
+lr = Node(chart, 2, 5, "HORIZONTAL")
+
+for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
+    Edge(chart, tb,Node(chart, i, 2.5, edge_string),edge_string)
+
+Edge(chart, lr, Node(chart, 0.5, 4, "-"),"-", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 6, "--"),"--", "dashed", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 4, "<-"),"<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 5, "->"),"->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 6, "<->"),"<->", layout=EdgeLayout.HORIZONTAL)
+```
+
+Edges are straight lines by default but it's possible to create curved edges by passing an `EdgeShape` to `Edge` class.
+
+:warning: the current code tries to order edges correctly on node border but some cases with multiple curved edges on a single border are not managed properly.
+
+![Edges](curved_edge_demo.svg)
+
+``` python
+a = Node(chart, 1.5, 8, "A")
+b = Node(chart, 2.5, 10, "B")
+c = Node(chart, 1, 12, "C")
+d = Node(chart, 2.5, 14, "D")
+e = Node(chart, 4, 16, "E")
+
+for i, shape in enumerate([EdgeShape.CURVE_BEFORE, EdgeShape.CURVE_BETWEEN, EdgeShape.CURVE_AFTER]):
+    Edge(chart, a, b, "->", shape.name.removeprefix("CURVE_"), layout=EdgeLayout.VERTICAL, shape=shape)
+    Edge(chart, c, d, "->", shape.name.removeprefix("CURVE_"), layout=EdgeLayout.HORIZONTAL, shape=shape)
+
+Edge(chart, b, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
+Edge(chart, d, e, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
+Edge(chart, b, e, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
+```
+
 ## Clusters
 
 Optional clusters can be created arround nodes.
 
 ![Clusters](cluster_demo.svg)
+
+``` python
+o = Node(chart, 1, -2, "Out node")
+a = Node(chart, 0, 1, "A")
+b = Node(chart, 2, 0, "B")
+c = Node(chart, 0, 3, "C")
+d = Node(chart, 1, 4, "D")
+e = Node(chart, 2, 3, "E")
+f = Node(chart, 1, 1, "F")
+
+af = Cluster(chart, [a,f])
+cd = Cluster(chart, [c,d], "Rounded cluster", rounded=True)
+be = Cluster(chart, [b,e], "Colored cluster", color="#efffb9")
+Cluster(chart, [af, cd, be], "Englobing cluster")
+```
 
 ## Credit
 
