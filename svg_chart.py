@@ -43,7 +43,7 @@ class Border(Enum):
     BOTTOM = 3
 
 class Node:
-    def __init__(self, chart, col, row, text, color="white", rounded=False):
+    def __init__(self, chart, col, row, text="", color="white", rounded=False):
         self.col = col
         self.row = row
         self.text = text
@@ -110,13 +110,15 @@ class Node:
                                       stroke='black',
                                       stroke_width=2,
                                       rx=rx))
-        drawing.append(draw.Text(self.text,
-                      self.chart.font_size,
-                      self.col * self.chart.horizontal_step,
-                      self.row * self.chart.vertical_step,
-                      text_anchor='middle',
-                      dominant_baseline='middle',
-                      font_family='Arial'))
+
+        if self.text != "":
+            drawing.append(draw.Text(self.text,
+                                     self.chart.font_size,
+                                     self.col * self.chart.horizontal_step,
+                                     self.row * self.chart.vertical_step,
+                                     text_anchor='middle',
+                                     dominant_baseline='middle',
+                                     font_family='Arial'))
 
 
 # edge_string format : [<]-[-][>]
@@ -274,6 +276,9 @@ class Edge:
                     drawing.append(path.M(x1, y1).L(x1, y1+arrow_length).Q(x1, self.yc, self.xc, self.yc).Q(x2, self.yc, x2, y2-arrow_length).L(x2, y2))
                 elif self.shape==EdgeShape.CURVE_AFTER:
                     drawing.append(path.M(x1, y1).L(x1, y2+arrow_length).Q(x1, self.yc, self.xc, self.yc).Q(x2, self.yc, x2, y2+arrow_length).L(x2, y2))
+
+        if self.text == "":
+            return
 
         drawing.append(draw.Text(self.text,
                                  self.chart.font_size,
