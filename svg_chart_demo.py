@@ -75,9 +75,9 @@ d = Node(chart, 1, 4, "D")
 e = Node(chart, 2, 3, "E")
 f = Node(chart, 1, 1, "F")
 
-Cluster(chart, [a,f])
-Cluster(chart, [c,d], "Rounded cluster", rounded=True)
-Cluster(chart, [b,e], "Colored cluster", color="#efffb9")
-Cluster(chart, [a,b,c,d,e,f], "Englobing cluster", margin_x=30, margin_y=50)
+af = Cluster(chart, [a,f])
+cd = Cluster(chart, [c,d], "Rounded cluster", rounded=True)
+be = Cluster(chart, [b,e], "Colored cluster", color="#efffb9")
+Cluster(chart, [af, cd, be], "Englobing cluster")
 
 chart.exportSvg("cluster_demo.svg")

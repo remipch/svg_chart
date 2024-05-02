@@ -309,12 +309,10 @@ class Edge:
                                  fill=self.color))
 
 class Cluster:
-    def __init__(self, chart, children, text="", margin_x=15, margin_y=15, color="none", rounded=False):
+    def __init__(self, chart, children, text="", color="none", rounded=False):
         assert(len(children)>0)
         self.children = children
         self.text = text
-        self.margin_x = margin_x
-        self.margin_y = margin_y
         self.color = color
         self.rounded = rounded
 
@@ -326,7 +324,10 @@ class Cluster:
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
         for child in self.children:
             englobing_rect.englobe(child.getRect())
-        englobing_rect.enlarge(self.margin_x, self.margin_y)
+        top_margin = self.chart.cluster_margin
+        if self.text!="":
+            top_margin = top_margin + self.chart.font_size
+        englobing_rect.enlarge(self.chart.cluster_margin, top_margin, self.chart.cluster_margin, self.chart.cluster_margin)
         return englobing_rect
 
     def draw(self, drawing):
@@ -358,11 +359,11 @@ class Rect:
         self.min_y = min_y
         self.max_y = max_y
 
-    def enlarge(self, margin_x, margin_y):
-        self.min_x = self.min_x - margin_x
-        self.max_x = self.max_x + margin_x
-        self.min_y = self.min_y - margin_y
-        self.max_y = self.max_y + margin_y
+    def enlarge(self, left, top, right, bottom):
+        self.min_x = self.min_x - left
+        self.max_x = self.max_x + right
+        self.min_y = self.min_y - top
+        self.max_y = self.max_y + bottom
 
     def englobe(self, other):
         self.min_x = min(self.min_x, other.min_x)
@@ -383,13 +384,15 @@ class Chart:
                  node_height = 40,
                  horizontal_node_space = 50,
                  vertical_node_space = 30,
-                 curved_edge_offset = 50):
+                 curved_edge_offset = 50,
+                 cluster_margin = 15):
         self.font_size  = font_size
         self.node_width  = node_width
         self.node_height  = node_height
         self.horizontal_node_space  = horizontal_node_space
         self.vertical_node_space  = vertical_node_space
         self.curved_edge_offset  = curved_edge_offset
+        self.cluster_margin  = cluster_margin
 
         self.all_nodes = []
         self.all_edges = []
@@ -414,7 +417,7 @@ class Chart:
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
         for child in self.all_clusters+self.all_edges+self.all_nodes:
             englobing_rect.englobe(child.getRect())
-        englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space)
+        englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space, self.horizontal_node_space, self.vertical_node_space)
         print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
 
         # Create a new drawing
