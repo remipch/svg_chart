@@ -176,10 +176,11 @@ class Edge:
             if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
                 self.xc = (self.left_node_x + self.right_node_x) / 2
             elif shape==EdgeShape.CURVE_BEFORE:
-                self.xc = self.left_node_x  - chart.curved_edge_offset
+                self.xc = self.left_node_x  - abs(self.left_node_y - self.right_node_y)/2
             elif shape==EdgeShape.CURVE_AFTER:
-                self.xc = self.right_node_x  + chart.curved_edge_offset
+                self.xc = self.right_node_x  + abs(self.left_node_y - self.right_node_y)/2
 
+            # WARNING: using only edge slope leads to incorrect edge ordering on border in case of multiple curved edges on the same border
             left_node_edge_slope = (self.left_node_y - self.yc) / (self.left_node_x - self.xc)
             self.left_node.addEdge(self.left_node_border, left_node_edge_slope, self)
             right_node_edge_slope = (self.right_node_y - self.yc) / (self.right_node_x - self.xc)
@@ -211,15 +212,14 @@ class Edge:
             if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
                 self.yc = (self.top_node_y + self.bottom_node_y) / 2
             elif shape==EdgeShape.CURVE_BEFORE:
-                self.yc = self.top_node_y  - chart.curved_edge_offset
+                self.yc = self.top_node_y  - abs(self.top_node_x - self.bottom_node_x)/4
             elif shape==EdgeShape.CURVE_AFTER:
-                self.yc = self.bottom_node_y  + chart.curved_edge_offset
+                self.yc = self.bottom_node_y  + abs(self.top_node_x - self.bottom_node_x)/4
 
-            # inverted slope (-x/y) instead of y/x to avoid division by zero because we're only interrested in edge ordering
-            top_node_edge_slope = -(self.top_node_x - self.xc) / (self.top_node_y - self.yc)
-            self.top_node.addEdge(self.top_node_border, top_node_edge_slope, self)
-            bottom_node_edge_slope = -(self.bottom_node_x - self.xc) / (self.bottom_node_y - self.yc)
-            self.bottom_node.addEdge(self.bottom_node_border, bottom_node_edge_slope, self)
+            top_node_edge_angle = math.atan2(self.top_node_y - self.yc, self.top_node_x - self.xc)
+            self.top_node.addEdge(self.top_node_border, top_node_edge_angle, self)
+            bottom_node_edge_angle = math.atan2(self.bottom_node_y - self.yc, self.bottom_node_x - self.xc)
+            self.bottom_node.addEdge(self.bottom_node_border, bottom_node_edge_angle, self)
 
         self.chart = chart
         chart.addEdge(self)
@@ -384,14 +384,12 @@ class Chart:
                  node_height = 40,
                  horizontal_node_space = 50,
                  vertical_node_space = 30,
-                 curved_edge_offset = 50,
                  cluster_margin = 15):
         self.font_size  = font_size
         self.node_width  = node_width
         self.node_height  = node_height
         self.horizontal_node_space  = horizontal_node_space
         self.vertical_node_space  = vertical_node_space
-        self.curved_edge_offset  = curved_edge_offset
         self.cluster_margin  = cluster_margin
 
         self.all_nodes = []
