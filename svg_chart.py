@@ -309,10 +309,9 @@ class Edge:
                                  fill=self.color))
 
 class Cluster:
-    # Warning: nodes append order defines the paint order (last nodes will hide first ones)
-    def __init__(self, chart, nodes, text="", margin_x=15, margin_y=15, color="none", rounded=False):
-        assert(len(nodes)>0)
-        self.nodes = nodes
+    def __init__(self, chart, children, text="", margin_x=15, margin_y=15, color="none", rounded=False):
+        assert(len(children)>0)
+        self.children = children
         self.text = text
         self.margin_x = margin_x
         self.margin_y = margin_y
@@ -325,8 +324,8 @@ class Cluster:
 
     def getRect(self):
         englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
-        for node in self.nodes:
-            englobing_rect.englobe(node.getRect())
+        for child in self.children:
+            englobing_rect.englobe(child.getRect())
         englobing_rect.enlarge(self.margin_x, self.margin_y)
         return englobing_rect
 
