@@ -24,34 +24,34 @@
 <rect x="-125.0" y="-50.0" width="1050.0" height="520.0" fill="white" stroke="none" />
 <path d="M350.0,20.0 L0.0,155.0" stroke="black" stroke-width="2" fill="none" />
 <text x="175.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="175.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="175.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <path d="M375.0,20.0 L200.0,155.0" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" />
 <text x="287.5" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="287.5" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="287.5" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <path d="M400.0,20.0 L400.0,155.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d0)" />
 <text x="400.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="400.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="400.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <path d="M425.0,20.0 L600.0,155.0" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" marker-end="url(#d1)" />
 <text x="512.5" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="512.5" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="512.5" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <path d="M450.0,20.0 L800.0,155.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d2)" marker-end="url(#d2)" />
 <text x="625.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="625.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="625.0" y="87.5" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <path d="M175.0,280.0 L325.0,343.3333333333333" stroke="black" stroke-width="2" fill="none" />
 <text x="250.0" y="311.66666666666663" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="250.0" y="311.66666666666663" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="250.0" y="311.66666666666663" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <path d="M175.0,420.0 L325.0,356.6666666666667" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" />
-<text x="250.0" y="388.33333333333337" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="250.0" y="388.33333333333337" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="250.0" y="388.33333333333337" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">dashed</text>
+<text x="250.0" y="388.33333333333337" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black">dashed</text>
 <path d="M475.0,340.0 L625.0,280.0" stroke="#d00000" stroke-width="2" fill="none" marker-start="url(#d3)" />
-<text x="550.0" y="310.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="550.0" y="310.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="550.0" y="310.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4">red</text>
+<text x="550.0" y="310.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="#d00000">red</text>
 <path d="M475.0,350.0 L625.0,350.0" stroke="#00aa00" stroke-width="2" fill="none" marker-end="url(#d4)" />
 <text x="550.0" y="350.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="550.0" y="350.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="550.0" y="350.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="#00aa00"></text>
 <path d="M475.0,360.0 L625.0,420.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d5)" marker-end="url(#d5)" />
 <text x="550.0" y="390.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="white" stroke="white" stroke-width="4"></text>
-<text x="550.0" y="390.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial"></text>
+<text x="550.0" y="390.0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial" fill="black"></text>
 <rect x="325.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="400" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">VERTICAL</text>
 <rect x="325.0" y="330.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />

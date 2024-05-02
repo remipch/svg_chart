@@ -45,8 +45,8 @@ for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
     Edge(chart, tb,Node(chart, i, 2.5, edge_string),edge_string)
 
 Edge(chart, lr, Node(chart, 0.5, 4, "-"),"-", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 0.5, 6, "--"),"--", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 4, "<-"),"<-", color="#d00000", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 6, "--"),"--", "dashed", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 4, "<-"),"<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
 Edge(chart, lr, Node(chart, 3.5, 5, "->"),"->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
 Edge(chart, lr, Node(chart, 3.5, 6, "<->"),"<->", layout=EdgeLayout.HORIZONTAL)
 

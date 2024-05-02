@@ -208,7 +208,8 @@ class Edge:
                                  (y1 + y2) / 2,
                                  text_anchor='middle',
                                  dominant_baseline='middle',
-                                 font_family='Arial'))
+                                 font_family='Arial',
+                                 fill=self.color))
 
 class Cluster:
     # Warning: nodes append order defines the paint order (last nodes will hide first ones)
