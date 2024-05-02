@@ -50,6 +50,16 @@ Edge(chart, lr, Node(chart, 3.5, 4, "<-"),"<-", "red", color="#d00000", layout=E
 Edge(chart, lr, Node(chart, 3.5, 5, "->"),"->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
 Edge(chart, lr, Node(chart, 3.5, 6, "<->"),"<->", layout=EdgeLayout.HORIZONTAL)
 
+a = Node(chart, 1.5, 8, "VERTICAL")
+b = Node(chart, 2.5, 10, "CURVED")
+c = Node(chart, 1, 12, "HORIZONTAL")
+d = Node(chart, 3, 14, "CURVED")
+for i, shape in enumerate([EdgeShape.CURVE_BEFORE, EdgeShape.CURVE_BETWEEN, EdgeShape.CURVE_AFTER]):
+    # Edge(chart, a, b, "->", "CURVE_BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=shape)
+    Edge(chart, a, b, "->", shape.name, layout=EdgeLayout.VERTICAL, shape=shape)
+    Edge(chart, c, d, "->", shape.name, layout=EdgeLayout.HORIZONTAL, shape=shape)
+
+
 chart.exportSvg("edge_demo.svg")
 
 
