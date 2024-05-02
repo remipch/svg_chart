@@ -13,7 +13,7 @@ Edge(chart, b, c)
 Edge(chart, a, d, "--")
 Edge(chart, d, e, "<->")
 
-Cluster(chart, [d,e], color="#efffb9")
+Cluster(chart, [d, e], color="#efffb9")
 Cluster(chart, [b, c])
 
 chart.exportSvg("simple_demo.svg")
@@ -88,10 +88,12 @@ c = Node(chart, 0, 3, "C")
 d = Node(chart, 1, 4, "D")
 e = Node(chart, 2, 3, "E")
 f = Node(chart, 1, 1, "F")
+cd = Edge(chart, c, d, "->", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
+be = Edge(chart, b, e, "->", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 
 af = Cluster(chart, [a,f])
-cd = Cluster(chart, [c,d], "Rounded cluster", rounded=True)
-be = Cluster(chart, [b,e], "Colored cluster", color="#efffb9")
+cd = Cluster(chart, [c,d,cd], "Rounded cluster", rounded=True)
+be = Cluster(chart, [b,e,be], "Colored cluster", color="#efffb9")
 Cluster(chart, [af, cd, be], "Englobing cluster")
 
 chart.exportSvg("cluster_demo.svg")
