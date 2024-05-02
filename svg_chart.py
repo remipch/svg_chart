@@ -23,7 +23,6 @@
 import drawsvg as draw
 import math
 from enum import Enum
-CURVED_EDGE_OFFSET = 50
 
 class EdgeLayout(Enum):
     AUTO = 0
@@ -177,9 +176,9 @@ class Edge:
             if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
                 self.xc = (self.left_node_x + self.right_node_x) / 2
             elif shape==EdgeShape.CURVE_BEFORE:
-                self.xc = self.left_node_x  - CURVED_EDGE_OFFSET
+                self.xc = self.left_node_x  - chart.curved_edge_offset
             elif shape==EdgeShape.CURVE_AFTER:
-                self.xc = self.right_node_x  + CURVED_EDGE_OFFSET
+                self.xc = self.right_node_x  + chart.curved_edge_offset
 
             left_node_edge_slope = (self.left_node_y - self.yc) / (self.left_node_x - self.xc)
             self.left_node.addEdge(self.left_node_border, left_node_edge_slope, self)
@@ -212,9 +211,9 @@ class Edge:
             if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
                 self.yc = (self.top_node_y + self.bottom_node_y) / 2
             elif shape==EdgeShape.CURVE_BEFORE:
-                self.yc = self.top_node_y  - CURVED_EDGE_OFFSET
+                self.yc = self.top_node_y  - chart.curved_edge_offset
             elif shape==EdgeShape.CURVE_AFTER:
-                self.yc = self.bottom_node_y  + CURVED_EDGE_OFFSET
+                self.yc = self.bottom_node_y  + chart.curved_edge_offset
 
             # inverted slope (-x/y) instead of y/x to avoid division by zero because we're only interrested in edge ordering
             top_node_edge_slope = -(self.top_node_x - self.xc) / (self.top_node_y - self.yc)
@@ -374,12 +373,14 @@ class Chart:
                  node_width = 150,
                  node_height = 40,
                  horizontal_node_space = 50,
-                 vertical_node_space = 30):
+                 vertical_node_space = 30,
+                 curved_edge_offset = 50):
         self.font_size  = font_size
         self.node_width  = node_width
         self.node_height  = node_height
         self.horizontal_node_space  = horizontal_node_space
         self.vertical_node_space  = vertical_node_space
+        self.curved_edge_offset  = curved_edge_offset
 
         self.all_nodes = []
         self.all_edges = []
