@@ -62,10 +62,15 @@ c = Node(chart, 1, 12, "C")
 d = Node(chart, 2.5, 14, "D")
 e = Node(chart, 4, 16, "E")
 
-for i, shape in enumerate([EdgeShape.CURVE_BEFORE, EdgeShape.CURVE_BETWEEN, EdgeShape.CURVE_AFTER]):
-    Edge(chart, a, b, "->", shape.name.removeprefix("CURVE_"), layout=EdgeLayout.VERTICAL, shape=shape)
-    Edge(chart, c, d, "->", shape.name.removeprefix("CURVE_"), layout=EdgeLayout.HORIZONTAL, shape=shape)
+# Vertical layout, curved edges :
+Edge(chart, a, b, "->", "BEFORE", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BEFORE)
+Edge(chart, a, b, "->", "BETWEEN", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BETWEEN)
+Edge(chart, a, b, "->", "AFTER", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
 
+# Horizontal layout, curved edges :
+Edge(chart, c, d, "->", "BEFORE", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BEFORE)
+Edge(chart, c, d, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
+Edge(chart, c, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 Edge(chart, b, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 Edge(chart, d, e, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
 Edge(chart, b, e, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
