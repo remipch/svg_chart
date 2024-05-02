@@ -12,10 +12,9 @@ Edge(chart, a, b, "->")
 Edge(chart, b, c)
 Edge(chart, a, d, "--")
 Edge(chart, d, e, "<->")
-bc = Edge(chart, b, c, "<-", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BEFORE)
 
 Cluster(chart, [d,e], color="#efffb9")
-Cluster(chart, [b, c, bc])
+Cluster(chart, [b, c])
 
 chart.exportSvg("simple_demo.svg")
 
