@@ -22,9 +22,9 @@ chart = Chart()
 
 for c in range(3):
     for r in range(3):
-        if c==0 and r==1:
+        if c == 0 and r == 1:
             o = Node(chart, c, r, F"{c},{r} (rounded)", rounded=True)
-        elif c==2 and r==2:
+        elif c == 2 and r == 2:
             o = Node(chart, c, r, F"{c},{r} (colored)", color="#bcd7ff")
         else:
             o = Node(chart, c, r, F"{c},{r}")
@@ -35,23 +35,21 @@ Node(chart, 1.5, 3, "1.5,3")
 chart.exportSvg("node_demo.svg")
 
 
-
 chart = Chart()
 
 tb = Node(chart, 2, 0, "VERTICAL")
 lr = Node(chart, 2, 5, "HORIZONTAL")
 
 for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
-    Edge(chart, tb,Node(chart, i, 2.5, edge_string),edge_string)
+    Edge(chart, tb, Node(chart, i, 2.5, edge_string), edge_string)
 
-Edge(chart, lr, Node(chart, 0.5, 4, "-"),"-", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 0.5, 6, "--"),"--", "dashed", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 4, "<-"),"<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 5, "->"),"->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 6, "<->"),"<->", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 4, "-"), "-", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 6, "--"), "--", "dashed", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 5, "->"), "->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 6, "<->"), "<->", layout=EdgeLayout.HORIZONTAL)
 
 chart.exportSvg("edge_demo.svg")
-
 
 
 chart = Chart()
@@ -78,7 +76,6 @@ Edge(chart, b, e, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.C
 chart.exportSvg("curved_edge_demo.svg")
 
 
-
 chart = Chart()
 
 o = Node(chart, 1, -2, "Out node")
@@ -91,9 +88,9 @@ f = Node(chart, 1, 1, "F")
 cd = Edge(chart, c, d, "->", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
 be = Edge(chart, b, e, "->", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 
-af = Cluster(chart, [a,f])
-cd = Cluster(chart, [c,d,cd], "Rounded cluster", rounded=True)
-be = Cluster(chart, [b,e,be], "Colored cluster", color="#efffb9")
+af = Cluster(chart, [a, f])
+cd = Cluster(chart, [c, d, cd], "Rounded cluster", rounded=True)
+be = Cluster(chart, [b, e, be], "Colored cluster", color="#efffb9")
 Cluster(chart, [af, cd, be], "Englobing cluster")
 
 chart.exportSvg("cluster_demo.svg")

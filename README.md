@@ -22,7 +22,7 @@ Edge(chart, b, c)
 Edge(chart, a, d, "--")
 Edge(chart, d, e, "<->")
 
-Cluster(chart, [d,e], color="#efffb9")
+Cluster(chart, [d, e], color="#efffb9")
 Cluster(chart, [b, c])
 
 chart.exportSvg("simple_demo.svg")
@@ -51,13 +51,13 @@ tb = Node(chart, 2, 0, "VERTICAL")
 lr = Node(chart, 2, 5, "HORIZONTAL")
 
 for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
-    Edge(chart, tb,Node(chart, i, 2.5, edge_string),edge_string)
+    Edge(chart, tb, Node(chart, i, 2.5, edge_string), edge_string)
 
-Edge(chart, lr, Node(chart, 0.5, 4, "-"),"-", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 0.5, 6, "--"),"--", "dashed", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 4, "<-"),"<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 5, "->"),"->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 6, "<->"),"<->", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 4, "-"), "-", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 6, "--"), "--", "dashed", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 5, "->"), "->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 3.5, 6, "<->"), "<->", layout=EdgeLayout.HORIZONTAL)
 ```
 
 Edges are straight lines by default but it's possible to create curved edges by passing an `EdgeShape` to `Edge` class.
@@ -104,9 +104,9 @@ f = Node(chart, 1, 1, "F")
 cd = Edge(chart, c, d, "->", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
 be = Edge(chart, b, e, "->", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 
-af = Cluster(chart, [a,f])
-cd = Cluster(chart, [c,d,cd], "Rounded cluster", rounded=True)
-be = Cluster(chart, [b,e,be], "Colored cluster", color="#efffb9")
+af = Cluster(chart, [a, f])
+cd = Cluster(chart, [c, d, cd], "Rounded cluster", rounded=True)
+be = Cluster(chart, [b, e, be], "Colored cluster", color="#efffb9")
 Cluster(chart, [af, cd, be], "Englobing cluster")
 ```
 

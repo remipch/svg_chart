@@ -24,22 +24,26 @@ import drawsvg as draw
 import math
 from enum import Enum
 
+
 class EdgeLayout(Enum):
     AUTO = 0
     VERTICAL = 1
     HORIZONTAL = 2
 
+
 class EdgeShape(Enum):
     STRAIGHT = 0
-    CURVE_BEFORE= 1
-    CURVE_BETWEEN= 2
-    CURVE_AFTER= 3
+    CURVE_BEFORE = 1
+    CURVE_BETWEEN = 2
+    CURVE_AFTER = 3
+
 
 class Border(Enum):
     LEFT = 0
     TOP = 1
     RIGHT = 2
     BOTTOM = 3
+
 
 class Node:
     def __init__(self, chart, col, row, text="", color="white", rounded=False):
@@ -70,36 +74,44 @@ class Node:
         return None
 
     def getBorderCenter(self, border):
-        if border==Border.LEFT:
-            return (self.col * self.chart.horizontal_step - self.chart.node_width/2, self.row * self.chart.vertical_step)
-        if border==Border.TOP:
-            return (self.col * self.chart.horizontal_step, self.row * self.chart.vertical_step - self.chart.node_height/2)
-        if border==Border.RIGHT:
-            return (self.col * self.chart.horizontal_step + self.chart.node_width/2, self.row * self.chart.vertical_step)
-        if border==Border.BOTTOM:
-            return (self.col * self.chart.horizontal_step, self.row * self.chart.vertical_step + self.chart.node_height/2)
+        if border == Border.LEFT:
+            return (self.col * self.chart.horizontal_step -
+                    self.chart.node_width / 2, self.row * self.chart.vertical_step)
+        if border == Border.TOP:
+            return (self.col * self.chart.horizontal_step, self.row *
+                    self.chart.vertical_step - self.chart.node_height / 2)
+        if border == Border.RIGHT:
+            return (self.col * self.chart.horizontal_step +
+                    self.chart.node_width / 2, self.row * self.chart.vertical_step)
+        if border == Border.BOTTOM:
+            return (self.col * self.chart.horizontal_step, self.row *
+                    self.chart.vertical_step + self.chart.node_height / 2)
 
     def getEdgePointOnBorder(self, border, edge):
         (x, y) = self.getBorderCenter(border)
-        if border==Border.LEFT:
-            y = y + (self.chart.node_height / 2) - (self.chart.node_height * (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1))
-        if border==Border.TOP:
-            x = x + self.chart.node_width * (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1) - self.chart.node_width / 2
-        if border==Border.RIGHT:
-            y = y + self.chart.node_height * (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1) - self.chart.node_height / 2
-        if border==Border.BOTTOM:
-            x = x + (self.chart.node_width / 2) - (self.chart.node_width * (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1))
+        if border == Border.LEFT:
+            y = y + (self.chart.node_height / 2) - (self.chart.node_height *
+                                                    (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1))
+        if border == Border.TOP:
+            x = x + self.chart.node_width * (self.getEdgeIndex(border, edge) + 1) / \
+                (self.getEdgeCount(border) + 1) - self.chart.node_width / 2
+        if border == Border.RIGHT:
+            y = y + self.chart.node_height * (self.getEdgeIndex(border, edge) + 1) / \
+                (self.getEdgeCount(border) + 1) - self.chart.node_height / 2
+        if border == Border.BOTTOM:
+            x = x + (self.chart.node_width / 2) - (self.chart.node_width *
+                                                   (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1))
 
         return (x, y)
 
     def getRect(self):
-        return Rect((self.col * self.chart.horizontal_step) - self.chart.node_width/2,
-                    (self.col * self.chart.horizontal_step) + self.chart.node_width/2,
-                    (self.row * self.chart.vertical_step) - self.chart.node_height/2,
-                    (self.row * self.chart.vertical_step) + self.chart.node_height/2)
+        return Rect((self.col * self.chart.horizontal_step) - self.chart.node_width / 2,
+                    (self.col * self.chart.horizontal_step) + self.chart.node_width / 2,
+                    (self.row * self.chart.vertical_step) - self.chart.node_height / 2,
+                    (self.row * self.chart.vertical_step) + self.chart.node_height / 2)
 
     def draw(self, drawing):
-        rx = self.chart.node_height/2 if self.rounded else 0
+        rx = self.chart.node_height / 2 if self.rounded else 0
         rect = self.getRect()
         drawing.append(draw.Rectangle(rect.min_x,
                                       rect.min_y,
@@ -128,27 +140,29 @@ def parseEdgeString(edge_string):
 
     return (dashed, node_a_arrow, node_b_arrow)
 
+
 class Edge:
-    def __init__(self, chart, node_a, node_b, edge_string="-", text="", color="black", layout=EdgeLayout.AUTO, shape=EdgeShape.STRAIGHT):
-        assert(node_a is not None)
-        assert(node_b is not None)
+    def __init__(self, chart, node_a, node_b, edge_string="-", text="",
+                 color="black", layout=EdgeLayout.AUTO, shape=EdgeShape.STRAIGHT):
+        assert (node_a is not None)
+        assert (node_b is not None)
         (self.dashed, node_a_arrow, node_b_arrow) = parseEdgeString(edge_string)
 
         self.text = text
         self.color = color
         self.layout = layout
         self.shape = shape
-        if layout==EdgeLayout.AUTO:
+        if layout == EdgeLayout.AUTO:
             self.shape = EdgeShape.STRAIGHT
             # VERTICAL by default, fallback to HORIZONTAL only if nodes are on the same row
             if node_a.row == node_b.row:
                 self.layout = EdgeLayout.HORIZONTAL
             else:
                 self.layout = EdgeLayout.VERTICAL
-        if layout==EdgeLayout.VERTICAL and shape==EdgeShape.STRAIGHT:
-            assert(node_a.row != node_b.row)
-        if layout==EdgeLayout.HORIZONTAL and shape==EdgeShape.STRAIGHT:
-            assert(node_a.col != node_b.col)
+        if layout == EdgeLayout.VERTICAL and shape == EdgeShape.STRAIGHT:
+            assert (node_a.row != node_b.row)
+        if layout == EdgeLayout.HORIZONTAL and shape == EdgeShape.STRAIGHT:
+            assert (node_a.col != node_b.col)
 
         if self.layout == EdgeLayout.HORIZONTAL:
             if node_a.col < node_b.col:
@@ -161,32 +175,33 @@ class Edge:
                 self.right_node = node_a
                 self.left_arrow = node_b_arrow
                 self.right_arrow = node_a_arrow
-            if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
+            if shape == EdgeShape.STRAIGHT or shape == EdgeShape.CURVE_BETWEEN:
                 self.left_node_border = Border.RIGHT
                 self.right_node_border = Border.LEFT
-            elif shape==EdgeShape.CURVE_BEFORE:
+            elif shape == EdgeShape.CURVE_BEFORE:
                 self.left_node_border = Border.LEFT
                 self.right_node_border = Border.LEFT
-            elif shape==EdgeShape.CURVE_AFTER:
+            elif shape == EdgeShape.CURVE_AFTER:
                 self.left_node_border = Border.RIGHT
                 self.right_node_border = Border.RIGHT
             (self.left_node_x, self.left_node_y) = self.left_node.getBorderCenter(self.left_node_border)
             (self.right_node_x, self.right_node_y) = self.right_node.getBorderCenter(self.right_node_border)
             self.yc = (self.left_node_y + self.right_node_y) / 2
-            if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
+            if shape == EdgeShape.STRAIGHT or shape == EdgeShape.CURVE_BETWEEN:
                 self.xc = (self.left_node_x + self.right_node_x) / 2
-            elif shape==EdgeShape.CURVE_BEFORE:
-                self.xc = self.left_node_x  - abs(self.left_node_y - self.right_node_y)/2
-            elif shape==EdgeShape.CURVE_AFTER:
-                self.xc = self.right_node_x  + abs(self.left_node_y - self.right_node_y)/2
+            elif shape == EdgeShape.CURVE_BEFORE:
+                self.xc = self.left_node_x - abs(self.left_node_y - self.right_node_y) / 2
+            elif shape == EdgeShape.CURVE_AFTER:
+                self.xc = self.right_node_x + abs(self.left_node_y - self.right_node_y) / 2
 
-            # WARNING: using only edge slope leads to incorrect edge ordering on border in case of multiple curved edges on the same border
+            # WARNING: using only edge slope leads to incorrect edge ordering on
+            # border in case of multiple curved edges on the same border
             left_node_edge_slope = (self.left_node_y - self.yc) / (self.left_node_x - self.xc)
             self.left_node.addEdge(self.left_node_border, left_node_edge_slope, self)
             right_node_edge_slope = (self.right_node_y - self.yc) / (self.right_node_x - self.xc)
             self.right_node.addEdge(self.right_node_border, right_node_edge_slope, self)
 
-        elif self.layout==EdgeLayout.VERTICAL:
+        elif self.layout == EdgeLayout.VERTICAL:
             if node_a.row < node_b.row:
                 self.top_node = node_a
                 self.bottom_node = node_b
@@ -197,24 +212,24 @@ class Edge:
                 self.bottom_node = node_a
                 self.top_arrow = node_b_arrow
                 self.bottom_arrow = node_a_arrow
-            if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
+            if shape == EdgeShape.STRAIGHT or shape == EdgeShape.CURVE_BETWEEN:
                 self.top_node_border = Border.BOTTOM
                 self.bottom_node_border = Border.TOP
-            elif shape==EdgeShape.CURVE_BEFORE:
+            elif shape == EdgeShape.CURVE_BEFORE:
                 self.top_node_border = Border.TOP
                 self.bottom_node_border = Border.TOP
-            elif shape==EdgeShape.CURVE_AFTER:
+            elif shape == EdgeShape.CURVE_AFTER:
                 self.top_node_border = Border.BOTTOM
                 self.bottom_node_border = Border.BOTTOM
             (self.top_node_x, self.top_node_y) = self.top_node.getBorderCenter(self.top_node_border)
             (self.bottom_node_x, self.bottom_node_y) = self.bottom_node.getBorderCenter(self.bottom_node_border)
             self.xc = (self.top_node_x + self.bottom_node_x) / 2
-            if shape==EdgeShape.STRAIGHT or shape==EdgeShape.CURVE_BETWEEN:
+            if shape == EdgeShape.STRAIGHT or shape == EdgeShape.CURVE_BETWEEN:
                 self.yc = (self.top_node_y + self.bottom_node_y) / 2
-            elif shape==EdgeShape.CURVE_BEFORE:
-                self.yc = self.top_node_y  - abs(self.top_node_x - self.bottom_node_x)/4
-            elif shape==EdgeShape.CURVE_AFTER:
-                self.yc = self.bottom_node_y  + abs(self.top_node_x - self.bottom_node_x)/4
+            elif shape == EdgeShape.CURVE_BEFORE:
+                self.yc = self.top_node_y - abs(self.top_node_x - self.bottom_node_x) / 4
+            elif shape == EdgeShape.CURVE_AFTER:
+                self.yc = self.bottom_node_y + abs(self.top_node_x - self.bottom_node_x) / 4
 
             top_node_edge_angle = math.atan2(self.top_node_y - self.yc, self.top_node_x - self.xc)
             self.top_node.addEdge(self.top_node_border, top_node_edge_angle, self)
@@ -229,11 +244,11 @@ class Edge:
         if self.layout == EdgeLayout.HORIZONTAL:
             (x1, y1) = self.left_node.getEdgePointOnBorder(self.left_node_border, self)
             (x2, y2) = self.right_node.getEdgePointOnBorder(self.right_node_border, self)
-        elif self.layout==EdgeLayout.VERTICAL:
+        elif self.layout == EdgeLayout.VERTICAL:
             (x1, y1) = self.top_node.getEdgePointOnBorder(self.top_node_border, self)
             (x2, y2) = self.bottom_node.getEdgePointOnBorder(self.bottom_node_border, self)
 
-        return Rect(min(x1,self.xc,x2), max(x1,self.xc,x2), min(y1,self.yc,y2), max(y1,self.yc,y2))
+        return Rect(min(x1, self.xc, x2), max(x1, self.xc, x2), min(y1, self.yc, y2), max(y1, self.yc, y2))
 
     def draw(self, drawing):
         arrow_length = 8
@@ -246,16 +261,16 @@ class Edge:
             origin_arrow = self.left_arrow
             destination_arrow = self.right_arrow
 
-        elif self.layout==EdgeLayout.VERTICAL:
+        elif self.layout == EdgeLayout.VERTICAL:
             (x1, y1) = self.top_node.getEdgePointOnBorder(self.top_node_border, self)
             (x2, y2) = self.bottom_node.getEdgePointOnBorder(self.bottom_node_border, self)
             origin_arrow = self.top_arrow
             destination_arrow = self.bottom_arrow
 
-        if self.shape==EdgeShape.STRAIGHT:
+        if self.shape == EdgeShape.STRAIGHT:
             # Recompute center with actual edge border points
-            self.xc = (x1+x2)/2
-            self.yc = (y1+y2)/2
+            self.xc = (x1 + x2) / 2
+            self.yc = (y1 + y2) / 2
             drawing.append(draw.Line(x1, y1, x2, y2,
                                      stroke=self.color,
                                      stroke_width=2,
@@ -272,19 +287,25 @@ class Edge:
                              marker_start=arrow if origin_arrow else None,
                              marker_end=arrow if destination_arrow else None)
             if self.layout == EdgeLayout.HORIZONTAL:
-                if self.shape==EdgeShape.CURVE_BEFORE:
-                    drawing.append(path.M(x1, y1).L(x1-arrow_length, y1).Q(self.xc, y1, self.xc, self.yc).Q(self.xc, y2, x1-arrow_length, y2).L(x2, y2))
-                elif self.shape==EdgeShape.CURVE_BETWEEN:
-                    drawing.append(path.M(x1, y1).L(x1+arrow_length, y1).Q(self.xc, y1, self.xc, self.yc).Q(self.xc, y2, x2-arrow_length, y2).L(x2, y2))
-                elif self.shape==EdgeShape.CURVE_AFTER:
-                    drawing.append(path.M(x1, y1).L(x2+arrow_length, y1).Q(self.xc, y1, self.xc, self.yc).Q(self.xc, y2, x2+arrow_length, y2).L(x2, y2))
+                if self.shape == EdgeShape.CURVE_BEFORE:
+                    drawing.append(path.M(x1, y1).L(x1 - arrow_length, y1).Q(self.xc, y1, self.xc,
+                                   self.yc).Q(self.xc, y2, x1 - arrow_length, y2).L(x2, y2))
+                elif self.shape == EdgeShape.CURVE_BETWEEN:
+                    drawing.append(path.M(x1, y1).L(x1 + arrow_length, y1).Q(self.xc, y1, self.xc,
+                                   self.yc).Q(self.xc, y2, x2 - arrow_length, y2).L(x2, y2))
+                elif self.shape == EdgeShape.CURVE_AFTER:
+                    drawing.append(path.M(x1, y1).L(x2 + arrow_length, y1).Q(self.xc, y1, self.xc,
+                                   self.yc).Q(self.xc, y2, x2 + arrow_length, y2).L(x2, y2))
             else:
-                if self.shape==EdgeShape.CURVE_BEFORE:
-                    drawing.append(path.M(x1, y1).L(x1, y1-arrow_length).Q(x1, self.yc, self.xc, self.yc).Q(x2, self.yc, x2, y1-arrow_length).L(x2, y2))
-                elif self.shape==EdgeShape.CURVE_BETWEEN:
-                    drawing.append(path.M(x1, y1).L(x1, y1+arrow_length).Q(x1, self.yc, self.xc, self.yc).Q(x2, self.yc, x2, y2-arrow_length).L(x2, y2))
-                elif self.shape==EdgeShape.CURVE_AFTER:
-                    drawing.append(path.M(x1, y1).L(x1, y2+arrow_length).Q(x1, self.yc, self.xc, self.yc).Q(x2, self.yc, x2, y2+arrow_length).L(x2, y2))
+                if self.shape == EdgeShape.CURVE_BEFORE:
+                    drawing.append(path.M(x1, y1).L(x1, y1 - arrow_length).Q(x1, self.yc, self.xc,
+                                   self.yc).Q(x2, self.yc, x2, y1 - arrow_length).L(x2, y2))
+                elif self.shape == EdgeShape.CURVE_BETWEEN:
+                    drawing.append(path.M(x1, y1).L(x1, y1 + arrow_length).Q(x1, self.yc, self.xc,
+                                   self.yc).Q(x2, self.yc, x2, y2 - arrow_length).L(x2, y2))
+                elif self.shape == EdgeShape.CURVE_AFTER:
+                    drawing.append(path.M(x1, y1).L(x1, y2 + arrow_length).Q(x1, self.yc, self.xc,
+                                   self.yc).Q(x2, self.yc, x2, y2 + arrow_length).L(x2, y2))
 
         if self.text == "":
             return
@@ -308,9 +329,10 @@ class Edge:
                                  font_family='Arial',
                                  fill=self.color))
 
+
 class Cluster:
     def __init__(self, chart, children, text="", color="none", rounded=False):
-        assert(len(children)>0)
+        assert (len(children) > 0)
         self.children = children
         self.text = text
         self.color = color
@@ -321,19 +343,20 @@ class Cluster:
         print(F"New cluster '{text}'")
 
     def getRect(self):
-        englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
+        englobing_rect = Rect(math.inf, -math.inf, math.inf, -math.inf)
         for child in self.children:
             englobing_rect.englobe(child.getRect())
         top_margin = self.chart.cluster_margin
-        if self.text!="":
+        if self.text != "":
             top_margin = top_margin + self.chart.font_size
-        englobing_rect.enlarge(self.chart.cluster_margin, top_margin, self.chart.cluster_margin, self.chart.cluster_margin)
+        englobing_rect.enlarge(self.chart.cluster_margin, top_margin,
+                               self.chart.cluster_margin, self.chart.cluster_margin)
         return englobing_rect
 
     def draw(self, drawing):
         englobing_rect = self.getRect()
 
-        rx = self.chart.node_height/2 if self.rounded else 0
+        rx = self.chart.node_height / 2 if self.rounded else 0
         drawing.append(draw.Rectangle(englobing_rect.min_x,
                                       englobing_rect.min_y,
                                       englobing_rect.getWidth(),
@@ -351,6 +374,7 @@ class Cluster:
                                  dominant_baseline='text-after-edge',
                                  font_family='Arial',
                                  font_weight='bold'))
+
 
 class Rect:
     def __init__(self, min_x, max_x, min_y, max_y):
@@ -377,20 +401,21 @@ class Rect:
     def getHeight(self):
         return self.max_y - self.min_y
 
+
 class Chart:
     def __init__(self,
-                 font_size = 20,
-                 node_width = 150,
-                 node_height = 40,
-                 horizontal_node_space = 50,
-                 vertical_node_space = 30,
-                 cluster_margin = 15):
-        self.font_size  = font_size
-        self.node_width  = node_width
-        self.node_height  = node_height
-        self.horizontal_node_space  = horizontal_node_space
-        self.vertical_node_space  = vertical_node_space
-        self.cluster_margin  = cluster_margin
+                 font_size=20,
+                 node_width=150,
+                 node_height=40,
+                 horizontal_node_space=50,
+                 vertical_node_space=30,
+                 cluster_margin=15):
+        self.font_size = font_size
+        self.node_width = node_width
+        self.node_height = node_height
+        self.horizontal_node_space = horizontal_node_space
+        self.vertical_node_space = vertical_node_space
+        self.cluster_margin = cluster_margin
 
         self.all_nodes = []
         self.all_edges = []
@@ -412,24 +437,24 @@ class Chart:
 
     def exportSvg(self, filename):
         # Compute drawing size by iterating all nodes and clusters
-        englobing_rect = Rect(math.inf,-math.inf,math.inf,-math.inf)
-        for child in self.all_clusters+self.all_edges+self.all_nodes:
+        englobing_rect = Rect(math.inf, -math.inf, math.inf, -math.inf)
+        for child in self.all_clusters + self.all_edges + self.all_nodes:
             englobing_rect.englobe(child.getRect())
-        englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space, self.horizontal_node_space, self.vertical_node_space)
-        print(F"Chart englobing_rect: {englobing_rect.min_x},{englobing_rect.max_x},{englobing_rect.min_y},{englobing_rect.max_y} ")
+        englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space,
+                               self.horizontal_node_space, self.vertical_node_space)
 
         # Create a new drawing
-        d = draw.Drawing(englobing_rect.max_x-englobing_rect.min_x,
-                         englobing_rect.max_y-englobing_rect.min_y,
-                         origin=(englobing_rect.min_x,englobing_rect.min_y))
+        d = draw.Drawing(englobing_rect.max_x - englobing_rect.min_x,
+                         englobing_rect.max_y - englobing_rect.min_y,
+                         origin=(englobing_rect.min_x, englobing_rect.min_y))
 
         # Draw englobing white rect
         d.append(draw.Rectangle(englobing_rect.min_x,
-                                      englobing_rect.min_y,
-                                      englobing_rect.getWidth(),
-                                      englobing_rect.getHeight(),
-                                      fill='white',
-                                      stroke='none'))
+                                englobing_rect.min_y,
+                                englobing_rect.getWidth(),
+                                englobing_rect.getHeight(),
+                                fill='white',
+                                stroke='none'))
 
         # Draw all elements (order is important to not hide children by their parent elements)
         for cluster in self.all_clusters:
