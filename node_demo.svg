@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="650.0" height="310.0" viewBox="-125.0 -50.0 650.0 310.0">
+     width="650.0" height="350.0" viewBox="-125.0 -55.0 650.0 350.0">
 <defs>
 </defs>
-<rect x="-125.0" y="-50.0" width="650.0" height="310.0" fill="white" stroke="none" />
-<rect x="-75.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<rect x="-125.0" y="-55.0" width="650.0" height="350.0" fill="white" stroke="none" />
+<rect x="-75.0" y="-25.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="0" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0,0</text>
-<rect x="-75.0" y="50.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="20.0" />
-<text x="0" y="70" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0,1 (rounded)</text>
-<rect x="-75.0" y="120.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="0" y="140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0,2</text>
-<rect x="125.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<rect x="-75.0" y="55.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="25.0" />
+<text x="0" y="80" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0,1 (rounded)</text>
+<rect x="-75.0" y="135.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="0" y="160" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0,2</text>
+<rect x="125.0" y="-25.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="200" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1,0</text>
-<rect x="125.0" y="50.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="200" y="70" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1,1</text>
-<rect x="125.0" y="120.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="200" y="140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1,2</text>
-<rect x="325.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="400" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">2,0</text>
-<rect x="325.0" y="50.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="400" y="70" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">2,1</text>
-<rect x="325.0" y="120.0" width="150.0" height="40.0" fill="#bcd7ff" stroke="black" stroke-width="2" rx="0" />
-<text x="400" y="140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">2,2 (colored)</text>
-<rect x="25.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="100.0" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0.5,3</text>
-<rect x="225.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
-<text x="300.0" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1.5,3</text>
+<rect x="125.0" y="55.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="200" y="80" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1,1</text>
+<rect x="125.0" y="135.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="200" y="160" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1,2</text>
+<path d="M375.0,0 L400,-25.0 L425.0,0 L400,25.0 Z" fill="white" stroke="black" stroke-width="2" />
+<text x="400" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">                   2,0   (diamond)</text>
+<rect x="325.0" y="55.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="400" y="80" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">2,1</text>
+<rect x="325.0" y="135.0" width="150.0" height="50.0" fill="#bcd7ff" stroke="black" stroke-width="2" rx="0" />
+<text x="400" y="160" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">2,2 (colored)</text>
+<rect x="25.0" y="215.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="100.0" y="240" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">0.5,3</text>
+<rect x="225.0" y="215.0" width="150.0" height="50.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<text x="300.0" y="240" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">1.5,3</text>
 </svg>

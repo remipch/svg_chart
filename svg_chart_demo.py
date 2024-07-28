@@ -4,9 +4,9 @@ chart = Chart()
 
 a = Node(chart, 0.5, 0, "A")
 b = Node(chart, 0, 2, "B", color="#bcd7ff")
-c = Node(chart, 0, 3, "C", rounded=True)
+c = Node(chart, 0, 3, "C", shape=NodeShape.DIAMOND)
 d = Node(chart, 1, 2, "D")
-e = Node(chart, 2, 2, "E")
+e = Node(chart, 2, 2, "E", shape=NodeShape.ROUNDED_RECTANGLE)
 
 Edge(chart, a, b, "->")
 Edge(chart, b, c)
@@ -18,12 +18,15 @@ Cluster(chart, [b, c])
 
 chart.exportSvg("simple_demo.svg")
 
-chart = Chart()
+chart = Chart(node_height=50)
 
 for c in range(3):
     for r in range(3):
         if c == 0 and r == 1:
-            o = Node(chart, c, r, F"{c},{r} (rounded)", rounded=True)
+            o = Node(chart, c, r, F"{c},{r} (rounded)", shape=NodeShape.ROUNDED_RECTANGLE)
+        elif c == 2 and r == 0:
+            sp = '\u00a0'  # unicode non breaking space (otherwise svg shrink multiple spaces)
+            o = Node(chart, c, r, F"{18*sp} {c},{r} {sp} (diamond)", shape=NodeShape.DIAMOND)
         elif c == 2 and r == 2:
             o = Node(chart, c, r, F"{c},{r} (colored)", color="#bcd7ff")
         else:

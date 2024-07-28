@@ -25,6 +25,12 @@ import math
 from enum import Enum
 
 
+class NodeShape(Enum):
+    RECTANGLE = 0
+    ROUNDED_RECTANGLE = 1
+    DIAMOND = 2
+
+
 class EdgeLayout(Enum):
     AUTO = 0
     VERTICAL = 1
@@ -46,12 +52,12 @@ class Border(Enum):
 
 
 class Node:
-    def __init__(self, chart, col, row, text="", color="white", rounded=False):
+    def __init__(self, chart, col, row, text="", color="white", shape=NodeShape.RECTANGLE):
         self.col = col
         self.row = row
         self.text = text
         self.color = color
-        self.rounded = rounded
+        self.shape = shape
         self.edges = {Border.LEFT: [], Border.TOP: [], Border.RIGHT: [], Border.BOTTOM: []}
 
         self.chart = chart
@@ -88,6 +94,20 @@ class Node:
                     self.chart.vertical_step + self.chart.node_height / 2)
 
     def getEdgePointOnBorder(self, border, edge):
+
+        if self.shape == NodeShape.DIAMOND:
+            xc = self.col * self.chart.horizontal_step
+            yc = self.row * self.chart.vertical_step
+            c = self.chart.node_height / 2
+            if border == Border.LEFT:
+                return (xc - c, yc)
+            if border == Border.TOP:
+                return (xc, yc - c)
+            if border == Border.RIGHT:
+                return (xc + c, yc)
+            if border == Border.BOTTOM:
+                return (xc, yc + c)
+
         (x, y) = self.getBorderCenter(border)
         if border == Border.LEFT:
             y = y + (self.chart.node_height / 2) - (self.chart.node_height *
@@ -111,16 +131,36 @@ class Node:
                     (self.row * self.chart.vertical_step) + self.chart.node_height / 2)
 
     def draw(self, drawing):
-        rx = self.chart.node_height / 2 if self.rounded else 0
-        rect = self.getRect()
-        drawing.append(draw.Rectangle(rect.min_x,
-                                      rect.min_y,
-                                      rect.getWidth(),
-                                      rect.getHeight(),
+        if self.shape == NodeShape.DIAMOND:
+            xc = self.col * self.chart.horizontal_step
+            yc = self.row * self.chart.vertical_step
+            c = self.chart.node_height / 2
+
+            # Connect the vertices to form a diamond shape
+            drawing.append(draw.Lines(xc - c,
+                                      yc,
+                                      xc,
+                                      yc - c,
+                                      xc + c,
+                                      yc,
+                                      xc,
+                                      yc + c,
+                                      close=True,
                                       fill=self.color,
                                       stroke='black',
-                                      stroke_width=2,
-                                      rx=rx))
+                                      stroke_width=2))
+
+        else:
+            rx = self.chart.node_height / 2 if self.shape == NodeShape.ROUNDED_RECTANGLE else 0
+            rect = self.getRect()
+            drawing.append(draw.Rectangle(rect.min_x,
+                                          rect.min_y,
+                                          rect.getWidth(),
+                                          rect.getHeight(),
+                                          fill=self.color,
+                                          stroke='black',
+                                          stroke_width=2,
+                                          rx=rx))
 
         if self.text != "":
             drawing.append(draw.Text(self.text,

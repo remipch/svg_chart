@@ -13,9 +13,9 @@ chart = Chart()
 
 a = Node(chart, 0.5, 0, "A")
 b = Node(chart, 0, 2, "B", color="#bcd7ff")
-c = Node(chart, 0, 3, "C", rounded=True)
+c = Node(chart, 0, 3, "C", shape=NodeShape.DIAMOND)
 d = Node(chart, 1, 2, "D")
-e = Node(chart, 2, 2, "E")
+e = Node(chart, 2, 2, "E", shape=NodeShape.ROUNDED_RECTANGLE)
 
 Edge(chart, a, b, "->")
 Edge(chart, b, c)

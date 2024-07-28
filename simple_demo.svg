@@ -15,17 +15,17 @@
 <rect x="-90.0" y="105.0" width="180.0" height="140.0" fill="none" stroke="black" stroke-width="2" rx="0" />
 <text x="-90.0" y="105.0" font-size="20" text-anchor="start" dominant-baseline="text-after-edge" font-family="Arial" font-weight="bold"></text>
 <path d="M75.0,20.0 L0.0,120.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d0)" />
-<path d="M0.0,160.0 L0.0,190.0" stroke="black" stroke-width="2" fill="none" />
+<path d="M0.0,160.0 L0,190.0" stroke="black" stroke-width="2" fill="none" />
 <path d="M125.0,20.0 L200.0,120.0" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" />
 <path d="M275.0,140.0 L325.0,140.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d1)" marker-end="url(#d1)" />
 <rect x="25.0" y="-20.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="100.0" y="0" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">A</text>
 <rect x="-75.0" y="120.0" width="150.0" height="40.0" fill="#bcd7ff" stroke="black" stroke-width="2" rx="0" />
 <text x="0" y="140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">B</text>
-<rect x="-75.0" y="190.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="20.0" />
+<path d="M-20.0,210 L0,190.0 L20.0,210 L0,230.0 Z" fill="white" stroke="black" stroke-width="2" />
 <text x="0" y="210" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">C</text>
 <rect x="125.0" y="120.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="200" y="140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">D</text>
-<rect x="325.0" y="120.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
+<rect x="325.0" y="120.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="20.0" />
 <text x="400" y="140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">E</text>
 </svg>
