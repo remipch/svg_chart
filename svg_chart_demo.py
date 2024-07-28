@@ -40,17 +40,17 @@ chart.exportSvg("node_demo.svg")
 
 chart = Chart()
 
-tb = Node(chart, 2, 0, "VERTICAL")
-lr = Node(chart, 2, 5, "HORIZONTAL")
+tb = Node(chart, 2, 0, "TOP_BOTTOM")
+lr = Node(chart, 2, 5, "LEFT_RIGHT")
 
 for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
     Edge(chart, tb, Node(chart, i, 2.5, edge_string), edge_string)
 
-Edge(chart, lr, Node(chart, 0.5, 4, "-"), "-", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 0.5, 6, "--"), "--", "dashed", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", "red", color="#d00000", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 5, "->"), "->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
-Edge(chart, lr, Node(chart, 3.5, 6, "<->"), "<->", layout=EdgeLayout.HORIZONTAL)
+Edge(chart, lr, Node(chart, 0.5, 4, "-"), "-", layout=EdgeLayout.LEFT_RIGHT)
+Edge(chart, lr, Node(chart, 0.5, 6, "--"), "--", "dashed", layout=EdgeLayout.LEFT_RIGHT)
+Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", "red", color="#d00000", layout=EdgeLayout.LEFT_RIGHT)
+Edge(chart, lr, Node(chart, 3.5, 5, "->"), "->", color="#00aa00", layout=EdgeLayout.LEFT_RIGHT)
+Edge(chart, lr, Node(chart, 3.5, 6, "<->"), "<->", layout=EdgeLayout.LEFT_RIGHT)
 
 
 chart.exportSvg("edge_demo.svg")
@@ -62,20 +62,20 @@ a = Node(chart, 1.5, 8, "A")
 b = Node(chart, 2.5, 10, "B")
 c = Node(chart, 1, 12, "C")
 d = Node(chart, 2.5, 14, "D")
-e = Node(chart, 4, 16, "E")
+e = Node(chart, 3.5, 16, "E")
 
 # Vertical layout, curved edges :
-Edge(chart, a, b, "->", "AFTER", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
-Edge(chart, a, b, "->", "BETWEEN", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BETWEEN)
-Edge(chart, a, b, "->", "BEFORE", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BEFORE)
+Edge(chart, a, b, "->", "BOTTOM_BOTTOM", layout=EdgeLayout.BOTTOM_BOTTOM, curved=True)
+Edge(chart, a, b, "->", "TOP_BOTTOM", layout=EdgeLayout.TOP_BOTTOM, curved=True)
+Edge(chart, a, b, "->", "TOP_TOP", layout=EdgeLayout.TOP_TOP, curved=True)
 
 # Horizontal layout, curved edges :
-Edge(chart, c, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
-Edge(chart, c, d, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
-Edge(chart, c, d, "->", "BEFORE", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BEFORE)
-Edge(chart, b, e, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
-Edge(chart, b, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
-Edge(chart, d, e, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
+Edge(chart, c, d, "->", layout=EdgeLayout.RIGHT_RIGHT, curved=True)
+Edge(chart, c, d, "->", "LEFT_RIGHT", layout=EdgeLayout.LEFT_RIGHT, curved=True)
+Edge(chart, c, d, "->", layout=EdgeLayout.LEFT_LEFT, curved=True)
+Edge(chart, b, e, "->", layout=EdgeLayout.RIGHT_RIGHT, curved=True)
+Edge(chart, b, d, "->", "RIGHT_RIGHT", layout=EdgeLayout.RIGHT_RIGHT, curved=True)
+Edge(chart, d, e, "->", "LEFT_LEFT", layout=EdgeLayout.LEFT_LEFT, curved=True)
 
 chart.exportSvg("curved_edge_demo.svg")
 
@@ -89,8 +89,8 @@ c = Node(chart, 0, 3, "C")
 d = Node(chart, 1, 4, "D")
 e = Node(chart, 2, 3, "E")
 f = Node(chart, 1, 1, "F")
-cd = Edge(chart, c, d, "->", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
-be = Edge(chart, b, e, "->", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
+cd = Edge(chart, c, d, "->", layout=EdgeLayout.BOTTOM_BOTTOM, curved=True)
+be = Edge(chart, b, e, "->", layout=EdgeLayout.RIGHT_RIGHT, curved=True)
 
 af = Cluster(chart, [a, f])
 cd = Cluster(chart, [c, d, cd], "Rounded cluster", rounded=True)
