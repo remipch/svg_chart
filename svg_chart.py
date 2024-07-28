@@ -51,6 +51,35 @@ class Border(Enum):
     BOTTOM = 3
 
 
+class Point:
+    # Point is a pseudo node allowing to define the edge curve
+    # It's treated as a node but does not draw anything
+    # it can also be used to enlarge the chart englobing rect
+
+    def __init__(self, chart, col, row):
+        self.col = col
+        self.row = row
+        self.chart = chart
+        self.text = F"Point {col,row}"
+        chart.addPoint(self)
+        print(F"New point '{self.text}'")
+
+    def addEdge(self, border, angle, edge):
+        pass
+
+    def getBorderCenter(self, border):
+        return (self.col * self.chart.horizontal_step, self.row * self.chart.vertical_step)
+
+    def getEdgePointOnBorder(self, border, edge):
+        return (self.col * self.chart.horizontal_step, self.row * self.chart.vertical_step)
+
+    def getRect(self):
+        return Rect((self.col * self.chart.horizontal_step),
+                    (self.col * self.chart.horizontal_step),
+                    (self.row * self.chart.vertical_step),
+                    (self.row * self.chart.vertical_step))
+
+
 class Node:
     def __init__(self, chart, col, row, text="", color="white", shape=NodeShape.RECTANGLE):
         self.col = col
@@ -461,6 +490,7 @@ class Chart:
         self.vertical_node_space = vertical_node_space
         self.cluster_margin = cluster_margin
 
+        self.all_points = []
         self.all_nodes = []
         self.all_edges = []
         self.all_clusters = []
@@ -469,6 +499,9 @@ class Chart:
         self.vertical_step = node_height + vertical_node_space
 
         print(F"New chart")
+
+    def addPoint(self, point):
+        self.all_points.append(point)
 
     def addNode(self, node):
         self.all_nodes.append(node)
@@ -482,7 +515,7 @@ class Chart:
     def exportSvg(self, filename):
         # Compute drawing size by iterating all nodes and clusters
         englobing_rect = Rect(math.inf, -math.inf, math.inf, -math.inf)
-        for child in self.all_clusters + self.all_edges + self.all_nodes:
+        for child in self.all_clusters + self.all_edges + self.all_nodes + self.all_points:
             englobing_rect.englobe(child.getRect())
         englobing_rect.enlarge(self.horizontal_node_space, self.vertical_node_space,
                                self.horizontal_node_space, self.vertical_node_space)
