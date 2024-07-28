@@ -47,8 +47,8 @@ for i, edge_string in enumerate(['-', '--', '<-', '-->', '<->']):
     Edge(chart, tb, Node(chart, i, 2.5, edge_string), edge_string)
 
 Edge(chart, lr, Node(chart, 0.5, 4, "-"), "-", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
-Edge(chart, lr, Node(chart, 0.5, 6, "--"), "--", "dashed", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
-Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", "red", color="#d00000", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
+Edge(chart, lr, Node(chart, 0.5, 6, "--"), "--", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
+Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", color="#d00000", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
 Edge(chart, lr, Node(chart, 3.5, 5, "->"), "->", color="#00aa00", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
 Edge(chart, lr, Node(chart, 3.5, 6, "<->"), "<->", layout=EdgeLayout.LEFT_RIGHT_STRAIGHT)
 
@@ -65,17 +65,17 @@ d = Node(chart, 2.5, 14, "D")
 e = Node(chart, 3.5, 16, "E")
 
 # Vertical layout, curved edges :
-Edge(chart, a, b, "->", "BOTTOM_BOTTOM", layout=EdgeLayout.BOTTOM_BOTTOM_CURVED)
-Edge(chart, a, b, "->", "TOP_BOTTOM", layout=EdgeLayout.TOP_BOTTOM_CURVED)
-Edge(chart, a, b, "->", "TOP_TOP", layout=EdgeLayout.TOP_TOP_CURVED)
+Edge(chart, a, b, "->", "BOTTOM_BOTTOM_CURVED", layout=EdgeLayout.BOTTOM_BOTTOM_CURVED)
+Edge(chart, a, b, "->", "TOP_BOTTOM_CURVED", layout=EdgeLayout.TOP_BOTTOM_CURVED)
+Edge(chart, a, b, "->", "TOP_TOP_CURVED", layout=EdgeLayout.TOP_TOP_CURVED)
 
 # Horizontal layout, curved edges :
 Edge(chart, c, d, "->", layout=EdgeLayout.RIGHT_RIGHT_CURVED)
-Edge(chart, c, d, "->", "LEFT_RIGHT", layout=EdgeLayout.LEFT_RIGHT_CURVED)
+Edge(chart, c, d, "->", "LEFT_RIGHT_CURVED", layout=EdgeLayout.LEFT_RIGHT_CURVED)
 Edge(chart, c, d, "->", layout=EdgeLayout.LEFT_LEFT_CURVED)
 Edge(chart, b, e, "->", layout=EdgeLayout.RIGHT_RIGHT_CURVED)
-Edge(chart, b, d, "->", "RIGHT_RIGHT", layout=EdgeLayout.RIGHT_RIGHT_CURVED)
-Edge(chart, d, e, "->", "LEFT_LEFT", layout=EdgeLayout.LEFT_LEFT_CURVED)
+Edge(chart, b, d, "->", "RIGHT_RIGHT_CURVED", layout=EdgeLayout.RIGHT_RIGHT_CURVED)
+Edge(chart, d, e, "->", "LEFT_LEFT_CURVED", layout=EdgeLayout.LEFT_LEFT_CURVED)
 
 chart.exportSvg("curved_edge_demo.svg")
 
