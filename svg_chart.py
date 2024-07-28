@@ -179,8 +179,6 @@ class Node:
                                       stroke='black',
                                       stroke_width=2))
 
-            text_anchor = 'start'
-
         else:
             rx = self.chart.node_height / 2 if self.shape == NodeShape.ROUNDED_RECTANGLE else 0
             rect = self.getRect()
@@ -193,14 +191,12 @@ class Node:
                                           stroke_width=2,
                                           rx=rx))
 
-            text_anchor = 'middle'
-
         if self.text != "":
             drawing.append(draw.Text(self.text,
                                      self.chart.font_size,
                                      self.col * self.chart.horizontal_step,
                                      self.row * self.chart.vertical_step,
-                                     text_anchor=text_anchor,
+                                     text_anchor='middle',
                                      dominant_baseline='middle',
                                      font_family='Arial'))
 
