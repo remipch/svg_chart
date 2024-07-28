@@ -93,18 +93,21 @@ class Node:
         chart.addNode(self)
         print(F"New node '{text}'")
 
-    def addEdge(self, border, angle, edge):
-        self.edges[border].append((angle, edge))
+    def addEdge(self, border, border_order, edge):
+        if border_order is None:
+            border_order = self.getEdgeCount(border)
 
-        # Sort edges by angle
+        self.edges[border].append((border_order, edge))
+
+        # Sort edges by border_order
         self.edges[border] = sorted(self.edges[border], key=lambda x: x[0])
 
     def getEdgeCount(self, border):
         return len(self.edges[border])
 
     def getEdgeIndex(self, border, edge):
-        for i, angle_and_edge in enumerate(self.edges[border]):
-            if angle_and_edge[1] == edge:
+        for i, order_and_edge in enumerate(self.edges[border]):
+            if order_and_edge[1] == edge:
                 return i
         return None
 
@@ -138,18 +141,12 @@ class Node:
                 return (xc, yc + c)
 
         (x, y) = self.getBorderCenter(border)
-        if border == Border.LEFT:
-            y = y + (self.chart.node_height / 2) - (self.chart.node_height *
-                                                    (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1))
-        if border == Border.TOP:
-            x = x + self.chart.node_width * (self.getEdgeIndex(border, edge) + 1) / \
-                (self.getEdgeCount(border) + 1) - self.chart.node_width / 2
-        if border == Border.RIGHT:
+        if border == Border.LEFT or border == Border.RIGHT:
             y = y + self.chart.node_height * (self.getEdgeIndex(border, edge) + 1) / \
                 (self.getEdgeCount(border) + 1) - self.chart.node_height / 2
-        if border == Border.BOTTOM:
-            x = x + (self.chart.node_width / 2) - (self.chart.node_width *
-                                                   (self.getEdgeIndex(border, edge) + 1) / (self.getEdgeCount(border) + 1))
+        else:
+            x = x + self.chart.node_width * (self.getEdgeIndex(border, edge) + 1) / \
+                (self.getEdgeCount(border) + 1) - self.chart.node_width / 2
 
         return (x, y)
 
@@ -211,8 +208,11 @@ def parseEdgeString(edge_string):
 
 
 class Edge:
+    # border_order allow to set the ordering of different edges connected to the same node border
+    # lower values will be on left/top, higher values will be on right/bottom
+    # if border_order is None, then the edge creation order is used
     def __init__(self, chart, node_a, node_b, edge_string="-", text="",
-                 color="black", layout=EdgeLayout.AUTO, shape=EdgeShape.STRAIGHT):
+                 color="black", layout=EdgeLayout.AUTO, shape=EdgeShape.STRAIGHT, node_a_border_order=None, node_b_border_order=None):
         assert (node_a is not None)
         assert (node_b is not None)
         (self.dashed, node_a_arrow, node_b_arrow) = parseEdgeString(edge_string)
@@ -239,11 +239,15 @@ class Edge:
                 self.right_node = node_b
                 self.left_arrow = node_a_arrow
                 self.right_arrow = node_b_arrow
+                left_node_border_order = node_a_border_order
+                right_node_border_order = node_b_border_order
             else:
                 self.left_node = node_b
                 self.right_node = node_a
                 self.left_arrow = node_b_arrow
                 self.right_arrow = node_a_arrow
+                left_node_border_order = node_b_border_order
+                right_node_border_order = node_a_border_order
             if shape == EdgeShape.STRAIGHT or shape == EdgeShape.CURVE_BETWEEN:
                 self.left_node_border = Border.RIGHT
                 self.right_node_border = Border.LEFT
@@ -263,12 +267,8 @@ class Edge:
             elif shape == EdgeShape.CURVE_AFTER:
                 self.xc = self.right_node_x + abs(self.left_node_y - self.right_node_y) / 2
 
-            # WARNING: using only edge slope leads to incorrect edge ordering on
-            # border in case of multiple curved edges on the same border
-            left_node_edge_slope = (self.left_node_y - self.yc) / (self.left_node_x - self.xc)
-            self.left_node.addEdge(self.left_node_border, left_node_edge_slope, self)
-            right_node_edge_slope = (self.right_node_y - self.yc) / (self.right_node_x - self.xc)
-            self.right_node.addEdge(self.right_node_border, right_node_edge_slope, self)
+            self.left_node.addEdge(self.left_node_border, left_node_border_order, self)
+            self.right_node.addEdge(self.right_node_border, right_node_border_order, self)
 
         elif self.layout == EdgeLayout.VERTICAL:
             if node_a.row < node_b.row:
@@ -276,11 +276,15 @@ class Edge:
                 self.bottom_node = node_b
                 self.top_arrow = node_a_arrow
                 self.bottom_arrow = node_b_arrow
+                top_node_border_order = node_a_border_order
+                bottom_node_border_order = node_b_border_order
             else:
                 self.top_node = node_b
                 self.bottom_node = node_a
                 self.top_arrow = node_b_arrow
                 self.bottom_arrow = node_a_arrow
+                top_node_border_order = node_a_border_order
+                bottom_node_border_order = node_b_border_order
             if shape == EdgeShape.STRAIGHT or shape == EdgeShape.CURVE_BETWEEN:
                 self.top_node_border = Border.BOTTOM
                 self.bottom_node_border = Border.TOP
@@ -300,10 +304,8 @@ class Edge:
             elif shape == EdgeShape.CURVE_AFTER:
                 self.yc = self.bottom_node_y + abs(self.top_node_x - self.bottom_node_x) / 4
 
-            top_node_edge_angle = math.atan2(self.top_node_y - self.yc, self.top_node_x - self.xc)
-            self.top_node.addEdge(self.top_node_border, top_node_edge_angle, self)
-            bottom_node_edge_angle = math.atan2(self.bottom_node_y - self.yc, self.bottom_node_x - self.xc)
-            self.bottom_node.addEdge(self.bottom_node_border, bottom_node_edge_angle, self)
+            self.top_node.addEdge(self.top_node_border, top_node_border_order, self)
+            self.bottom_node.addEdge(self.bottom_node_border, bottom_node_border_order, self)
 
         self.chart = chart
         chart.addEdge(self)

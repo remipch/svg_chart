@@ -52,6 +52,7 @@ Edge(chart, lr, Node(chart, 3.5, 4, "<-"), "<-", "red", color="#d00000", layout=
 Edge(chart, lr, Node(chart, 3.5, 5, "->"), "->", color="#00aa00", layout=EdgeLayout.HORIZONTAL)
 Edge(chart, lr, Node(chart, 3.5, 6, "<->"), "<->", layout=EdgeLayout.HORIZONTAL)
 
+
 chart.exportSvg("edge_demo.svg")
 
 
@@ -64,17 +65,17 @@ d = Node(chart, 2.5, 14, "D")
 e = Node(chart, 4, 16, "E")
 
 # Vertical layout, curved edges :
-Edge(chart, a, b, "->", "BEFORE", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BEFORE)
-Edge(chart, a, b, "->", "BETWEEN", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BETWEEN)
 Edge(chart, a, b, "->", "AFTER", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_AFTER)
+Edge(chart, a, b, "->", "BETWEEN", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BETWEEN)
+Edge(chart, a, b, "->", "BEFORE", layout=EdgeLayout.VERTICAL, shape=EdgeShape.CURVE_BEFORE)
 
 # Horizontal layout, curved edges :
-Edge(chart, c, d, "->", "BEFORE", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BEFORE)
-Edge(chart, c, d, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
 Edge(chart, c, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
+Edge(chart, c, d, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
+Edge(chart, c, d, "->", "BEFORE", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BEFORE)
+Edge(chart, b, e, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 Edge(chart, b, d, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 Edge(chart, d, e, "->", "BETWEEN", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_BETWEEN)
-Edge(chart, b, e, "->", "AFTER", layout=EdgeLayout.HORIZONTAL, shape=EdgeShape.CURVE_AFTER)
 
 chart.exportSvg("curved_edge_demo.svg")
 
