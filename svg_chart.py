@@ -344,7 +344,8 @@ class Edge:
                                  font_family='Arial',
                                  fill='white',
                                  stroke='white',
-                                 stroke_width=4))
+                                 stroke_width=14,
+                                 stroke_miterlimit=1))
         drawing.append(draw.Text(self.text,
                                  self.chart.font_size,
                                  xc,
