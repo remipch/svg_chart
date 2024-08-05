@@ -19,7 +19,7 @@
 <rect x="-105.0" y="-90.0" width="715.0" height="470.0" fill="none" stroke="black" stroke-width="2" rx="0" />
 <text x="-105.0" y="-90.0" font-size="20" text-anchor="start" dominant-baseline="text-after-edge" font-family="Arial" font-weight="bold">Englobing cluster</text>
 <path d="M0.0,230.0 L0.0,308.0 Q0.0,350.0,100.0,350.0 Q200.0,350.0,200.0,308.0 L200.0,300.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d0)" />
-<path d="M475.0,210.0 L483.0,210.0 Q580.0,210.0,580.0,105.0 Q580.0,0.0,483.0,0.0 L475.0,0.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d1)" />
+<path d="M475.0,0.0 L483.0,0.0 Q580.0,0.0,580.0,105.0 Q580.0,210.0,483.0,210.0 L475.0,210.0" stroke="black" stroke-width="2" fill="none" marker-end="url(#d1)" />
 <rect x="125.0" y="-160.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />
 <text x="200" y="-140" font-size="20" text-anchor="middle" dominant-baseline="middle" font-family="Arial">Out node</text>
 <rect x="-75.0" y="50.0" width="150.0" height="40.0" fill="white" stroke="black" stroke-width="2" rx="0" />

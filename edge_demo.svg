@@ -27,8 +27,8 @@
 <path d="M400.0,20.0 L400.0,155.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d0)" />
 <path d="M425.0,20.0 L600.0,155.0" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" marker-end="url(#d1)" />
 <path d="M450.0,20.0 L800.0,155.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d2)" marker-end="url(#d2)" />
-<path d="M175.0,280.0 L325.0,343.3333333333333" stroke="black" stroke-width="2" fill="none" />
-<path d="M175.0,420.0 L325.0,356.6666666666667" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" />
+<path d="M325.0,343.3333333333333 L175.0,280.0" stroke="black" stroke-width="2" fill="none" />
+<path d="M325.0,356.6666666666667 L175.0,420.0" stroke="black" stroke-width="2" stroke-dasharray="7,4" fill="none" />
 <path d="M475.0,340.0 L625.0,280.0" stroke="#d00000" stroke-width="2" fill="none" marker-start="url(#d3)" />
 <path d="M475.0,350.0 L625.0,350.0" stroke="#00aa00" stroke-width="2" fill="none" marker-end="url(#d4)" />
 <path d="M475.0,360.0 L625.0,420.0" stroke="black" stroke-width="2" fill="none" marker-start="url(#d5)" marker-end="url(#d5)" />

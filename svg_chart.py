@@ -218,7 +218,10 @@ class Edge:
         assert (node_a is not None)
         assert (node_b is not None)
         (self.dashed, node_a_arrow, node_b_arrow) = parseEdgeString(edge_string)
-
+        self.node_a = node_a
+        self.node_b = node_b
+        self.node_a_arrow = node_a_arrow
+        self.node_b_arrow = node_b_arrow
         self.text = text
         self.color = color
         if layout == EdgeLayout.AUTO:
@@ -228,164 +231,114 @@ class Edge:
             else:
                 layout = EdgeLayout.TOP_BOTTOM_STRAIGHT
         self.layout = layout
-        self.curved = (layout != EdgeLayout.TOP_BOTTOM_STRAIGHT and layout != EdgeLayout.LEFT_RIGHT_STRAIGHT)
-        self.horizontal_layout = (layout == EdgeLayout.LEFT_RIGHT_STRAIGHT or layout == EdgeLayout.RIGHT_RIGHT_CURVED or layout ==
-                                  EdgeLayout.LEFT_RIGHT_CURVED or layout == EdgeLayout.LEFT_LEFT_CURVED)
-        if layout == EdgeLayout.TOP_BOTTOM_STRAIGHT or layout == EdgeLayout.TOP_BOTTOM_CURVED:
-            assert (node_a.row != node_b.row)
+
         if layout == EdgeLayout.LEFT_RIGHT_STRAIGHT or layout == EdgeLayout.LEFT_RIGHT_CURVED:
-            assert (node_a.col != node_b.col)
-
-        if self.horizontal_layout:
-            if node_a.col < node_b.col:
-                self.left_node = node_a
-                self.right_node = node_b
-                self.left_arrow = node_a_arrow
-                self.right_arrow = node_b_arrow
-                left_node_border_order = node_a_border_order
-                right_node_border_order = node_b_border_order
+            if node_a.getBorderCenter(Border.RIGHT)[0] < node_b.getBorderCenter(Border.LEFT)[0]:
+                self.node_a_border = Border.RIGHT
+                self.node_b_border = Border.LEFT
+            elif node_b.getBorderCenter(Border.RIGHT)[0] < node_a.getBorderCenter(Border.LEFT)[0]:
+                self.node_a_border = Border.LEFT
+                self.node_b_border = Border.RIGHT
             else:
-                self.left_node = node_b
-                self.right_node = node_a
-                self.left_arrow = node_b_arrow
-                self.right_arrow = node_a_arrow
-                left_node_border_order = node_b_border_order
-                right_node_border_order = node_a_border_order
-            if layout == EdgeLayout.LEFT_RIGHT_STRAIGHT or layout == EdgeLayout.LEFT_RIGHT_CURVED:
-                self.left_node_border = Border.RIGHT
-                self.right_node_border = Border.LEFT
-            elif layout == EdgeLayout.LEFT_LEFT_CURVED:
-                self.left_node_border = Border.LEFT
-                self.right_node_border = Border.LEFT
-            elif layout == EdgeLayout.RIGHT_RIGHT_CURVED:
-                self.left_node_border = Border.RIGHT
-                self.right_node_border = Border.RIGHT
-            (left_node_x, left_node_y) = self.left_node.getBorderCenter(self.left_node_border)
-            (right_node_x, right_node_y) = self.right_node.getBorderCenter(self.right_node_border)
-            self.yc = (left_node_y + right_node_y) / 2
-            if layout == EdgeLayout.LEFT_RIGHT_STRAIGHT or layout == EdgeLayout.LEFT_RIGHT_CURVED:
-                self.xc = (left_node_x + right_node_x) / 2
-            elif layout == EdgeLayout.LEFT_LEFT_CURVED:
-                self.xc = left_node_x - abs(left_node_y - right_node_y) / 2
-            elif layout == EdgeLayout.RIGHT_RIGHT_CURVED:
-                self.xc = right_node_x + abs(left_node_y - right_node_y) / 2
-
-            self.left_node.addEdge(self.left_node_border, left_node_border_order, self)
-            self.right_node.addEdge(self.right_node_border, right_node_border_order, self)
-
-        else:
-            if node_a.row < node_b.row:
-                self.top_node = node_a
-                self.bottom_node = node_b
-                self.top_arrow = node_a_arrow
-                self.bottom_arrow = node_b_arrow
-                top_node_border_order = node_a_border_order
-                bottom_node_border_order = node_b_border_order
+                assert (False)
+        elif layout == EdgeLayout.LEFT_LEFT_CURVED:
+            self.node_a_border = Border.LEFT
+            self.node_b_border = Border.LEFT
+        elif layout == EdgeLayout.RIGHT_RIGHT_CURVED:
+            self.node_a_border = Border.RIGHT
+            self.node_b_border = Border.RIGHT
+        elif layout == EdgeLayout.TOP_BOTTOM_STRAIGHT or layout == EdgeLayout.TOP_BOTTOM_CURVED:
+            if node_a.getBorderCenter(Border.BOTTOM)[1] < node_b.getBorderCenter(Border.TOP)[1]:
+                self.node_a_border = Border.BOTTOM
+                self.node_b_border = Border.TOP
+            elif node_b.getBorderCenter(Border.BOTTOM)[1] < node_a.getBorderCenter(Border.TOP)[1]:
+                self.node_a_border = Border.TOP
+                self.node_b_border = Border.BOTTOM
             else:
-                self.top_node = node_b
-                self.bottom_node = node_a
-                self.top_arrow = node_b_arrow
-                self.bottom_arrow = node_a_arrow
-                top_node_border_order = node_a_border_order
-                bottom_node_border_order = node_b_border_order
-            if layout == EdgeLayout.TOP_BOTTOM_STRAIGHT or layout == EdgeLayout.TOP_BOTTOM_CURVED:
-                self.top_node_border = Border.BOTTOM
-                self.bottom_node_border = Border.TOP
-            elif layout == EdgeLayout.TOP_TOP_CURVED:
-                self.top_node_border = Border.TOP
-                self.bottom_node_border = Border.TOP
-            elif layout == EdgeLayout.BOTTOM_BOTTOM_CURVED:
-                self.top_node_border = Border.BOTTOM
-                self.bottom_node_border = Border.BOTTOM
-            (self.top_node_x, self.top_node_y) = self.top_node.getBorderCenter(self.top_node_border)
-            (self.bottom_node_x, self.bottom_node_y) = self.bottom_node.getBorderCenter(self.bottom_node_border)
-            self.xc = (self.top_node_x + self.bottom_node_x) / 2
-            if layout == EdgeLayout.TOP_BOTTOM_STRAIGHT or layout == EdgeLayout.TOP_BOTTOM_CURVED:
-                self.yc = (self.top_node_y + self.bottom_node_y) / 2
-            elif layout == EdgeLayout.TOP_TOP_CURVED:
-                self.yc = self.top_node_y - abs(self.top_node_x - self.bottom_node_x) / 4
-            elif layout == EdgeLayout.BOTTOM_BOTTOM_CURVED:
-                self.yc = self.bottom_node_y + abs(self.top_node_x - self.bottom_node_x) / 4
+                assert (False)
+        elif layout == EdgeLayout.TOP_TOP_CURVED:
+            self.node_a_border = Border.TOP
+            self.node_b_border = Border.TOP
+        elif layout == EdgeLayout.BOTTOM_BOTTOM_CURVED:
+            self.node_a_border = Border.BOTTOM
+            self.node_b_border = Border.BOTTOM
 
-            self.top_node.addEdge(self.top_node_border, top_node_border_order, self)
-            self.bottom_node.addEdge(self.bottom_node_border, bottom_node_border_order, self)
+        node_a.addEdge(self.node_a_border, node_a_border_order, self)
+        node_b.addEdge(self.node_b_border, node_b_border_order, self)
 
         self.chart = chart
         chart.addEdge(self)
         print(F"New edge '{text}' : '{node_a.text}' '{edge_string}' '{node_b.text}'")
 
-    def getRect(self):
-        if self.horizontal_layout:
-            (x1, y1) = self.left_node.getEdgePointOnBorder(self.left_node_border, self)
-            (x2, y2) = self.right_node.getEdgePointOnBorder(self.right_node_border, self)
-        else:
-            (x1, y1) = self.top_node.getEdgePointOnBorder(self.top_node_border, self)
-            (x2, y2) = self.bottom_node.getEdgePointOnBorder(self.bottom_node_border, self)
+    def getCenter(self):
+        (xa, ya) = self.node_a.getEdgePointOnBorder(self.node_a_border, self)
+        (xb, yb) = self.node_b.getEdgePointOnBorder(self.node_b_border, self)
+        (xc, yc) = ((xa + xb) / 2, (ya + yb) / 2)
 
-        return Rect(min(x1, self.xc, x2), max(x1, self.xc, x2), min(y1, self.yc, y2), max(y1, self.yc, y2))
+        if self.layout == EdgeLayout.LEFT_LEFT_CURVED:
+            xc = min(xa, xb) - abs(ya - yb) / 2
+        elif self.layout == EdgeLayout.RIGHT_RIGHT_CURVED:
+            xc = max(xa, xb) + abs(ya - yb) / 2
+        elif self.layout == EdgeLayout.TOP_TOP_CURVED:
+            yc = min(ya, yb) - abs(xa - xb) / 4
+        elif self.layout == EdgeLayout.BOTTOM_BOTTOM_CURVED:
+            yc = max(ya, yb) + abs(xa - xb) / 4
+
+        return (xc, yc)
+
+    def getRect(self):
+        (xa, ya) = self.node_a.getEdgePointOnBorder(self.node_a_border, self)
+        (xb, yb) = self.node_b.getEdgePointOnBorder(self.node_b_border, self)
+        (xc, yc) = self.getCenter()
+        return Rect(min(xa, xb, xc), max(xa, xb, xc), min(ya, yb, yc), max(ya, yb, yc))
 
     def draw(self, drawing):
         arrow_length = 8
         arrow = draw.Marker(-arrow_length, -5, 2, 5, orient='auto-start-reverse')
         arrow.append(draw.Lines(-arrow_length, 3, -arrow_length, -3, 2, 0, fill=self.color, close=True))
 
-        if self.horizontal_layout:
-            (x1, y1) = self.left_node.getEdgePointOnBorder(self.left_node_border, self)
-            (x2, y2) = self.right_node.getEdgePointOnBorder(self.right_node_border, self)
-            origin_arrow = self.left_arrow
-            destination_arrow = self.right_arrow
+        path = draw.Path(stroke=self.color,
+                         stroke_width=2,
+                         stroke_dasharray="7,4" if self.dashed else None,
+                         fill='none',
+                         marker_start=arrow if self.node_a_arrow else None,
+                         marker_end=arrow if self.node_b_arrow else None)
 
-        else:
-            (x1, y1) = self.top_node.getEdgePointOnBorder(self.top_node_border, self)
-            (x2, y2) = self.bottom_node.getEdgePointOnBorder(self.bottom_node_border, self)
-            origin_arrow = self.top_arrow
-            destination_arrow = self.bottom_arrow
+        (xa, ya) = self.node_a.getEdgePointOnBorder(self.node_a_border, self)
+        (xb, yb) = self.node_b.getEdgePointOnBorder(self.node_b_border, self)
+        (xc, yc) = self.getCenter()
+        if self.layout == EdgeLayout.TOP_BOTTOM_STRAIGHT or self.layout == EdgeLayout.LEFT_RIGHT_STRAIGHT:
+            path = path.M(xa, ya).L(xb, yb)
+        elif self.layout == EdgeLayout.LEFT_LEFT_CURVED:
+            x_arrow = min(xa, xb) - arrow_length
+            path = path.M(xa, ya).L(x_arrow, ya).Q(xc, ya, xc, yc).Q(xc, yb, x_arrow, yb).L(xb, yb)
+        elif self.layout == EdgeLayout.LEFT_RIGHT_CURVED:
+            xa_arrow = xa + arrow_length if xa < xb else xa - arrow_length
+            xb_arrow = xb - arrow_length if xa < xb else xb + arrow_length
+            path = path.M(xa, ya).L(xa_arrow, ya).Q(xc, ya, xc, yc).Q(xc, yb, xb_arrow, yb).L(xb, yb)
+        elif self.layout == EdgeLayout.RIGHT_RIGHT_CURVED:
+            x_arrow = max(xa, xb) + arrow_length
+            path = path.M(xa, ya).L(x_arrow, ya).Q(xc, ya, xc, yc).Q(xc, yb, x_arrow, yb).L(xb, yb)
+        elif self.layout == EdgeLayout.TOP_TOP_CURVED:
+            y_arrow = min(ya, yb) - arrow_length
+            path = path.M(xa, ya).L(xa, y_arrow).Q(xa, yc, xc, yc).Q(xb, yc, xb, y_arrow).L(xb, yb)
+        elif self.layout == EdgeLayout.TOP_BOTTOM_CURVED:
+            ya_arrow = ya + arrow_length if ya < yb else ya - arrow_length
+            yb_arrow = yb - arrow_length if ya < yb else yb + arrow_length
+            path = path.M(xa, ya).L(xa, ya_arrow).Q(xa, yc, xc, yc).Q(xb, yc, xb, yb_arrow).L(xb, yb)
+        elif self.layout == EdgeLayout.BOTTOM_BOTTOM_CURVED:
+            y_arrow = max(ya, yb) + arrow_length
+            path = path.M(xa, ya).L(xa, y_arrow).Q(xa, yc, xc, yc).Q(xb, yc, xb, y_arrow).L(xb, yb)
 
-        if not self.curved:
-            # Recompute center with actual edge border points
-            self.xc = (x1 + x2) / 2
-            self.yc = (y1 + y2) / 2
-            drawing.append(draw.Line(x1, y1, x2, y2,
-                                     stroke=self.color,
-                                     stroke_width=2,
-                                     stroke_dasharray="7,4" if self.dashed else None,
-                                     fill='none',
-                                     marker_start=arrow if origin_arrow else None,
-                                     marker_end=arrow if destination_arrow else None))
-
-        else:
-            path = draw.Path(stroke=self.color,
-                             stroke_width=2,
-                             stroke_dasharray="7,4" if self.dashed else None,
-                             fill='none',
-                             marker_start=arrow if origin_arrow else None,
-                             marker_end=arrow if destination_arrow else None)
-            if self.layout == EdgeLayout.LEFT_LEFT_CURVED:
-                drawing.append(path.M(x1, y1).L(x1 - arrow_length, y1).Q(self.xc, y1, self.xc,
-                                                                         self.yc).Q(self.xc, y2, x1 - arrow_length, y2).L(x2, y2))
-            elif self.layout == EdgeLayout.LEFT_RIGHT_CURVED:
-                drawing.append(path.M(x1, y1).L(x1 + arrow_length, y1).Q(self.xc, y1, self.xc,
-                                                                         self.yc).Q(self.xc, y2, x2 - arrow_length, y2).L(x2, y2))
-            elif self.layout == EdgeLayout.RIGHT_RIGHT_CURVED:
-                drawing.append(path.M(x1, y1).L(x2 + arrow_length, y1).Q(self.xc, y1, self.xc,
-                                                                         self.yc).Q(self.xc, y2, x2 + arrow_length, y2).L(x2, y2))
-            elif self.layout == EdgeLayout.TOP_TOP_CURVED:
-                drawing.append(path.M(x1, y1).L(x1, y1 - arrow_length).Q(x1, self.yc, self.xc,
-                                                                         self.yc).Q(x2, self.yc, x2, y1 - arrow_length).L(x2, y2))
-            elif self.layout == EdgeLayout.TOP_BOTTOM_CURVED:
-                drawing.append(path.M(x1, y1).L(x1, y1 + arrow_length).Q(x1, self.yc, self.xc,
-                                                                         self.yc).Q(x2, self.yc, x2, y2 - arrow_length).L(x2, y2))
-            elif self.layout == EdgeLayout.BOTTOM_BOTTOM_CURVED:
-                drawing.append(path.M(x1, y1).L(x1, y2 + arrow_length).Q(x1, self.yc, self.xc,
-                               self.yc).Q(x2, self.yc, x2, y2 + arrow_length).L(x2, y2))
+        drawing.append(path)
 
         if self.text == "":
             return
 
         drawing.append(draw.Text(self.text,
                                  self.chart.font_size,
-                                 self.xc,
-                                 self.yc,
+                                 xc,
+                                 yc,
                                  text_anchor='middle',
                                  dominant_baseline='middle',
                                  font_family='Arial',
@@ -394,8 +347,8 @@ class Edge:
                                  stroke_width=4))
         drawing.append(draw.Text(self.text,
                                  self.chart.font_size,
-                                 self.xc,
-                                 self.yc,
+                                 xc,
+                                 yc,
                                  text_anchor='middle',
                                  dominant_baseline='middle',
                                  font_family='Arial',
