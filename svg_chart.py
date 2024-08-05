@@ -260,15 +260,15 @@ class Edge:
             elif layout == EdgeLayout.RIGHT_RIGHT_CURVED:
                 self.left_node_border = Border.RIGHT
                 self.right_node_border = Border.RIGHT
-            (self.left_node_x, self.left_node_y) = self.left_node.getBorderCenter(self.left_node_border)
-            (self.right_node_x, self.right_node_y) = self.right_node.getBorderCenter(self.right_node_border)
-            self.yc = (self.left_node_y + self.right_node_y) / 2
+            (left_node_x, left_node_y) = self.left_node.getBorderCenter(self.left_node_border)
+            (right_node_x, right_node_y) = self.right_node.getBorderCenter(self.right_node_border)
+            self.yc = (left_node_y + right_node_y) / 2
             if layout == EdgeLayout.LEFT_RIGHT_STRAIGHT or layout == EdgeLayout.LEFT_RIGHT_CURVED:
-                self.xc = (self.left_node_x + self.right_node_x) / 2
+                self.xc = (left_node_x + right_node_x) / 2
             elif layout == EdgeLayout.LEFT_LEFT_CURVED:
-                self.xc = self.left_node_x - abs(self.left_node_y - self.right_node_y) / 2
+                self.xc = left_node_x - abs(left_node_y - right_node_y) / 2
             elif layout == EdgeLayout.RIGHT_RIGHT_CURVED:
-                self.xc = self.right_node_x + abs(self.left_node_y - self.right_node_y) / 2
+                self.xc = right_node_x + abs(left_node_y - right_node_y) / 2
 
             self.left_node.addEdge(self.left_node_border, left_node_border_order, self)
             self.right_node.addEdge(self.right_node_border, right_node_border_order, self)
